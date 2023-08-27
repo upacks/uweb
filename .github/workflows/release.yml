@@ -3,7 +3,9 @@ name: "2. Release"
 on:
   push:
     branches:
-      - "production-build"
+      - "*"
+  pull_request:
+    branches: [ production-build ]
 
 permissions:
   contents: write
