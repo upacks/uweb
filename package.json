@@ -1,6 +1,6 @@
 {
     "name": "uweb",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "repository": "git@github.com:upacks/uweb.git",
     "author": "gantulga.khuyag@gmail.com",
     "license": "MIT",
@@ -38,6 +38,7 @@
         "start": "ubin watch_app",
         "build": "ubin build_app --bundle --port 3003",
         "serve": "node ./dist/run.js",
+        "release": "release-it",
         "_build": "tsc -p tsconfig.json"
     },
     "dependencies": {
@@ -53,6 +54,7 @@
         "@types/node": "^18.11.18",
         "@types/react": "^18.2.20",
         "@types/react-dom": "^18.2.7",
+        "release-it": "^16.1.5",
         "typescript": "^4.5.2"
     },
     "browserslist": {
