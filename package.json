@@ -41,6 +41,12 @@
         "release": "git pull && yarn version --patch && git add . && git push --follow-tags",
         "_build": "tsc -p tsconfig.json"
     },
+    "husky": {
+        "hooks": {
+            "pre-commit": "git pull && yarn version --patch && git add .",
+            "pre-push": ""
+        }
+    },
     "dependencies": {
         "@ant-design/icons": "^5.2.5",
         "antd": "^5.8.4",
@@ -54,6 +60,7 @@
         "@types/node": "^18.11.18",
         "@types/react": "^18.2.20",
         "@types/react-dom": "^18.2.7",
+        "husky": "^8.0.3",
         "typescript": "^4.5.2"
     },
     "browserslist": {
