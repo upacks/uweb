@@ -1,0 +1,72 @@
+{
+    "name": "uweb",
+    "version": "1.0.0",
+    "repository": "git@github.com:upacks/uweb.git",
+    "author": "gantulga.khuyag@gmail.com",
+    "license": "MIT",
+    "type": "commonjs",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "ts-module": "./dist/index.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.js",
+            "ts-import": "./src/index.ts"
+        },
+        "./antd": {
+            "types": "./dist/antd/index.d.ts",
+            "import": "./dist/antd/index.js",
+            "require": "./dist/antd/index.js",
+            "ts-import": "./src/antd/index.ts"
+        },
+        "./three": {
+            "types": "./dist/three/index.d.ts",
+            "import": "./dist/three/index.js",
+            "require": "./dist/three/index.js",
+            "ts-import": "./src/three/index.ts"
+        },
+        "./map": {
+            "types": "./dist/map/index.d.ts",
+            "import": "./dist/map/index.js",
+            "require": "./dist/map/index.js",
+            "ts-import": "./src/map/index.ts"
+        }
+    },
+    "scripts": {
+        "start": "ubin watch_app",
+        "build": "ubin build_app --bundle --port 3003",
+        "serve": "node ./dist/run.js",
+        "_build": "tsc -p tsconfig.json"
+    },
+    "dependencies": {
+        "@ant-design/icons": "^5.2.5",
+        "antd": "^5.8.4",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "stats.js": "^0.17.0",
+        "ubin": "upacks/ubin#1.0.4",
+        "utils": "upacks/utils#1.1.2"
+    },
+    "devDependencies": {
+        "@types/node": "^18.11.18",
+        "@types/react": "^18.2.20",
+        "@types/react-dom": "^18.2.7",
+        "nodemon": "^2.0.15",
+        "ts-node": "^10.4.0",
+        "typescript": "^4.5.2"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    }
+}

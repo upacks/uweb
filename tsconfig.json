@@ -1,0 +1,36 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "allowJs": true,
+        "jsx": "preserve",
+        "removeComments": true,
+        "resolveJsonModule": true,
+        "noUnusedLocals": false,
+        "sourceMap": true,
+        "declaration": true,
+        "declarationMap": true,
+        "strict": true,
+        "baseUrl": ".",
+        "forceConsistentCasingInFileNames": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "moduleResolution": "Node16",
+        "skipLibCheck": true,
+        "outDir": "dist",
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "lib": [
+            "esnext",
+            "dom"
+        ]
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
