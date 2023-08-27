@@ -47,7 +47,7 @@
         "react-dom": "^18.2.0",
         "stats.js": "^0.17.0",
         "ubin": "upacks/ubin#1.0.4",
-        "utils": "upacks/utils#1.1.2"
+        "utils": "upacks/utils#1.1.3"
     },
     "devDependencies": {
         "@types/node": "^18.11.18",

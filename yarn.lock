@@ -1724,9 +1724,9 @@ utils@upacks/utils#1.0.8:
     shelljs "^0.8.5"
     uuid "^9.0.0"
 
-utils@upacks/utils#1.1.2:
-  version "1.0.1"
-  resolved "https://codeload.github.com/upacks/utils/tar.gz/f0c804712681b15f8434a6d463cc9301f579909c"
+utils@upacks/utils#1.1.3:
+  version "1.1.3"
+  resolved "https://codeload.github.com/upacks/utils/tar.gz/5b1f478c15e69b85af4959ba0fbe3f371855a66f"
   dependencies:
     blocked "^1.3.0"
     cli-color "^2.0.3"
