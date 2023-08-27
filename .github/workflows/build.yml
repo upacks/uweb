@@ -11,7 +11,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  buildPack:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
