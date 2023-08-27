@@ -1,6 +1,6 @@
 {
     "name": "uweb",
-    "version": "1.0.0",
+    "version": "0.0.2",
     "repository": "git@github.com:upacks/uweb.git",
     "author": "gantulga.khuyag@gmail.com",
     "license": "MIT",
@@ -17,21 +17,21 @@
         },
         "./antd": {
             "types": "./dist/antd/index.d.ts",
-            "import": "./dist/antd/index.js",
-            "require": "./dist/antd/index.js",
-            "ts-import": "./src/antd/index.ts"
+            "import": "./dist/antd/index.jsx",
+            "require": "./dist/antd/index.jsx",
+            "ts-import": "./src/antd/index.tsx"
         },
         "./three": {
             "types": "./dist/three/index.d.ts",
-            "import": "./dist/three/index.js",
-            "require": "./dist/three/index.js",
-            "ts-import": "./src/three/index.ts"
+            "import": "./dist/three/index.jsx",
+            "require": "./dist/three/index.jsx",
+            "ts-import": "./src/three/index.tsx"
         },
         "./map": {
             "types": "./dist/map/index.d.ts",
-            "import": "./dist/map/index.js",
-            "require": "./dist/map/index.js",
-            "ts-import": "./src/map/index.ts"
+            "import": "./dist/map/index.jsx",
+            "require": "./dist/map/index.jsx",
+            "ts-import": "./src/map/index.tsx"
         }
     },
     "scripts": {
