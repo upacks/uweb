@@ -1,6 +1,6 @@
 {
     "name": "uweb",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "repository": "git@github.com:upacks/uweb.git",
     "author": "gantulga.khuyag@gmail.com",
     "license": "MIT",
@@ -17,9 +17,9 @@
         },
         "./utils": {
             "types": "./dist/utils/index.d.ts",
-            "import": "./dist/utils/index.jsx",
-            "require": "./dist/utils/index.jsx",
-            "ts-import": "./src/utils/index.tsx"
+            "import": "./dist/utils/index.js",
+            "require": "./dist/utils/index.js",
+            "ts-import": "./src/utils/index.ts"
         },
         "./antd": {
             "types": "./dist/antd/index.d.ts",
