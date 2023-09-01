@@ -309,4 +309,4 @@ function precisionRound(number, precision) {
 	return Math.round(number * factor) / factor;
 }
 
-// module.exports = UTMLatLng;
+module.exports = UTMLatLng;
