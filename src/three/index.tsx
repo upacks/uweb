@@ -8,12 +8,6 @@ const { GLTFLoader } = require('three/addons/loaders/GLTFLoader.js')
 import { log, Doc, KeyValue, Delay, Loop } from 'utils/web'
 import { UTM, Tick, distance3D, colorize } from '../utils'
 
-export {
-    THREE,
-    GLTFLoader,
-    ThreeView,
-}
-
 class ThreeView {
 
     conf: any = {
@@ -230,4 +224,11 @@ class ThreeView {
 
     }
 
+}
+
+export {
+    THREE,
+    GLTFLoader,
+    ViewHelper,
+    ThreeView,
 }

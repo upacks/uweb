@@ -58,10 +58,10 @@ const run = (
 
 }
 
-export default {
-    React: React,
+export {
+    React,
     ReactDOM,
-    antd: antd,
-    icon: icon,
+    antd,
+    icon,
     run
 }

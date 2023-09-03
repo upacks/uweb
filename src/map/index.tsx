@@ -1,23 +1,19 @@
 import * as THREE from 'three'
-import maptalks, { Map, TileLayer } from 'maptalks'
-import maptalks_three, { ThreeLayer } from 'maptalks.three'
+import * as maptalks from 'maptalks'
+import * as maptalks_three from 'maptalks.three'
 
 import { log, Doc, KeyValue, Delay, Loop, Safe, Sfy } from 'utils/web'
 import { distanceLatLon } from '../utils'
 
-export {
-    THREE,
-    maptalks,
-    maptalks_three,
-    MapView,
-}
+const { Map, TileLayer } = maptalks
+const { ThreeLayer } = maptalks_three
 
 class MapView {
 
-    map: Map | any = {}
+    map: maptalks.Map | any = {}
     scene: any
     camera: any
-    threeLayer: ThreeLayer = new ThreeLayer('threelayer', {
+    threeLayer: maptalks_three.ThreeLayer = new ThreeLayer('threelayer', {
         identifyCountOnEvent: 1,
         forceRenderOnMoving: true,
         forceRenderOnRotating: true
@@ -107,4 +103,11 @@ class MapView {
     onUpdate = (cb: any) => this.conf.updateCallback = cb
     onReady = (cb: any) => this.conf.readyCallback = cb
 
+}
+
+export {
+    THREE,
+    maptalks,
+    maptalks_three,
+    MapView,
 }
