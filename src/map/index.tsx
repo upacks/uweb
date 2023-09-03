@@ -1,11 +1,18 @@
 import * as THREE from 'three'
-import { Map, TileLayer } from 'maptalks'
-import { ThreeLayer } from 'maptalks.three'
+import maptalks, { Map, TileLayer } from 'maptalks'
+import maptalks_three, { ThreeLayer } from 'maptalks.three'
 
 import { log, Doc, KeyValue, Delay, Loop, Safe, Sfy } from 'utils/web'
 import { distanceLatLon } from '../utils'
 
-export class MapView {
+export {
+    THREE,
+    maptalks,
+    maptalks_three,
+    MapView,
+}
+
+class MapView {
 
     map: Map | any = {}
     scene: any

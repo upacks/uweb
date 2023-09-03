@@ -8,7 +8,13 @@ const { GLTFLoader } = require('three/addons/loaders/GLTFLoader.js')
 import { log, Doc, KeyValue, Delay, Loop } from 'utils/web'
 import { UTM, Tick, distance3D, colorize } from '../utils'
 
-export class ThreeView {
+export {
+    THREE,
+    GLTFLoader,
+    ThreeView,
+}
+
+class ThreeView {
 
     conf: any = {
         tick: new Tick(),

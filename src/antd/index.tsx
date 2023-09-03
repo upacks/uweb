@@ -1,10 +1,18 @@
 import React, { FC, useState, useEffect } from "react"
 import ReactDOM from 'react-dom/client'
-import { theme, ConfigProvider, Layout, FloatButton, Modal } from 'antd'
-import { BulbOutlined, BulbFilled, SettingOutlined } from '@ant-design/icons'
+import antd, { theme, ConfigProvider, Layout, FloatButton, Modal } from 'antd'
+import icon, { BulbOutlined, BulbFilled, SettingOutlined } from '@ant-design/icons'
 import { Doc, KeyValue } from 'utils/web'
 
-export const run = (
+export {
+    React,
+    ReactDOM,
+    antd,
+    icon,
+    run,
+}
+
+const run = (
     Main: FC | any,
     Setting: FC | any,
     _: any
