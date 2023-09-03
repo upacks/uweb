@@ -1,16 +1,11 @@
 import React, { FC, useState, useEffect } from "react"
 import ReactDOM from 'react-dom/client'
-import antd, { theme, ConfigProvider, Layout, FloatButton, Modal } from 'antd'
-import icon, { BulbOutlined, BulbFilled, SettingOutlined } from '@ant-design/icons'
+import * as antd from 'antd'
+import * as icon from '@ant-design/icons'
 import { Doc, KeyValue } from 'utils/web'
 
-export {
-    React,
-    ReactDOM,
-    antd,
-    icon,
-    run,
-}
+const { theme, ConfigProvider, Layout, FloatButton, Modal } = antd
+const { BulbOutlined, BulbFilled, SettingOutlined } = icon
 
 const run = (
     Main: FC | any,
@@ -61,4 +56,12 @@ const run = (
 
     DOM.render(<Render />)
 
+}
+
+export = {
+    React: React,
+    ReactDOM,
+    antd: antd,
+    icon: icon,
+    run
 }
