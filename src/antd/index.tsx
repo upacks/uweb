@@ -58,7 +58,7 @@ const run = (
 
 }
 
-export = {
+export default {
     React: React,
     ReactDOM,
     antd: antd,
