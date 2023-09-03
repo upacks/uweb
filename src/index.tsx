@@ -6,9 +6,9 @@ const { Title } = Typography
 
 if (true) {
 
-    const { run } = require('./antd')
+    const { Render } = require('./react')
     const { ThreeView } = require('./three')
-    const { MapView } = require('./map')
+    const { MapView } = require('./maptalks')
     const { Vehicle, Toyota } = require('./utils')
 
     console.log('Toyota', Toyota)
@@ -91,6 +91,6 @@ if (true) {
 
     const setting = ({ isDarkMode }: any) => <Title>:OMG:{isDarkMode ? 'DARK' : 'LIGHT'}</Title>
 
-    run(main, setting, { maxWidth: '100%' })
+    Render(main, setting, { maxWidth: '100%' })
 
 }
