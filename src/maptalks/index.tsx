@@ -3,7 +3,7 @@ import * as maptalks from 'maptalks'
 import * as maptalks_three from 'maptalks.three'
 
 import { log, Doc, KeyValue, Delay, Loop, Safe, Sfy } from 'utils/web'
-import { distanceLatLon } from './utils'
+import { distanceLatLon } from '../utils'
 
 const { Map, TileLayer } = maptalks
 const { ThreeLayer } = maptalks_three
