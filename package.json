@@ -1,6 +1,6 @@
 {
     "name": "uweb",
-    "version": "0.0.21",
+    "version": "0.0.22",
     "repository": "git@github.com:upacks/uweb.git",
     "author": "gantulga.khuyag@gmail.com",
     "license": "MIT",
@@ -32,6 +32,12 @@
             "import": "./dist/comps/index.js",
             "require": "./dist/comps/index.js",
             "ts-import": "./src/comps/index.ts"
+        },
+        "./utils": {
+            "types": "./dist/utils/index.d.ts",
+            "import": "./dist/utils/index.js",
+            "require": "./dist/utils/index.js",
+            "ts-import": "./src/utils/index.ts"
         }
     },
     "scripts": {
