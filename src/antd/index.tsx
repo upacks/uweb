@@ -1,16 +1,10 @@
 import React, { FC, useState, useEffect } from "react"
 import ReactDOM from 'react-dom/client'
-import * as antd from 'antd'
+import { theme, ConfigProvider, Layout, FloatButton, Modal } from 'antd'
 import { BulbOutlined, BulbFilled, SettingOutlined } from '@ant-design/icons'
 import { Doc, KeyValue } from 'utils/web'
 
-const { theme, ConfigProvider, Layout, FloatButton, Modal } = antd
-
-const run = (
-    Main: FC | any,
-    Setting: FC | any,
-    _: any
-) => {
+const Render = (Main: FC | any, Setting: FC | any, _: any) => {
 
     const DOM = ReactDOM.createRoot(Doc.getElementById('root'))
 
@@ -57,9 +51,4 @@ const run = (
 
 }
 
-export {
-    React,
-    ReactDOM,
-    antd,
-    run,
-}
+export { React, ReactDOM, Render }
