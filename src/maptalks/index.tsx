@@ -3,7 +3,9 @@ import * as maptalks from 'maptalks'
 import * as maptalks_three from 'maptalks.three'
 
 import { log, Doc, KeyValue, Delay, Loop, Safe, Sfy } from 'utils/web'
-import { distanceLatLon, turf } from '../utils'
+import { distanceLatLon } from '../utils'
+import bearing from '@turf/bearing'
+import { point, Point } from '@turf/helpers'
 
 const { Map, TileLayer } = maptalks
 const { ThreeLayer } = maptalks_three
@@ -98,9 +100,9 @@ class MapView {
         }
     }
 
-    getBearing = (c1: number, c2: number) => {
-        const bearing = turf.bearing(c1, c2)
-        return Math.abs(this.map.getBearing() - bearing) < 30 ? this.map.getBearing() : bearing
+    getBearing = (c1: any, c2: any) => {
+        const bear = bearing(c1, c2)
+        return Math.abs(this.map.getBearing() - bear) < 30 ? this.map.getBearing() : bear
     }
 
     view = (position: string = 'TOP', { coords }: {
@@ -120,7 +122,7 @@ class MapView {
 
         if (position === 'BACK' && back && front) {
 
-            const bearing = this.getBearing(turf.point([back[1], back[0]]), turf.point([front[1], front[0]]))
+            const bearing = this.getBearing(point([back[1], back[0]]), point([front[1], front[0]]))
             this.map.animateTo({
                 bearing: bearing,
                 center: [front[1], front[0]],

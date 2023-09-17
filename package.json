@@ -1,6 +1,6 @@
 {
     "name": "uweb",
-    "version": "0.0.27",
+    "version": "0.0.28",
     "repository": "git@github.com:upacks/uweb.git",
     "author": "gantulga.khuyag@gmail.com",
     "license": "MIT",
@@ -49,6 +49,7 @@
     },
     "dependencies": {
         "@ant-design/icons": "^5.2.5",
+        "@turf/turf": "^6.5.0",
         "antd": "^5.8.4",
         "maptalks": "^1.0.0-rc.25",
         "maptalks.three": "^0.37.2",
