@@ -117,7 +117,10 @@ class ThreeView {
 
     }
 
-    view = (position = 'TOP', distance = 50 /* Unused */, { camera, TM, MP }: any) => {
+    view = (position = 'TOP', { camera, MP }: {
+        camera: { top: { x: number, y: number, z: number }, right: { x: number, y: number, z: number }, back: { x: number, y: number, z: number } },
+        MP: { x: number, y: number, z: number },
+    }) => {
 
         this.updateHelpers([MP.x, MP.y, MP.z])
         if (!this.conf.tick.can()) { return 'panning' }
