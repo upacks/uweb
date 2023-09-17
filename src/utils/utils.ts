@@ -1,6 +1,7 @@
 import { Loop } from 'utils/web'
 
 const UTMLatLng = require('./utm.js')
+export const turf = require('../utils/turf.min.js')
 export const UTM = new UTMLatLng('WGS 84')
 
 /**
