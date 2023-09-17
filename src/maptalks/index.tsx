@@ -85,6 +85,8 @@ class MapView {
 
             }
 
+            update()
+
         }, 0)
 
     }
