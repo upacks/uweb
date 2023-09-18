@@ -5,8 +5,8 @@ const { OrbitControls } = require('three/addons/controls/OrbitControls.js')
 const { ViewHelper } = require('three/addons/helpers/ViewHelper.js')
 const { GLTFLoader } = require('three/addons/loaders/GLTFLoader.js')
 
-import { log, Doc, KeyValue, Delay, Loop } from 'utils/web'
-import { UTM, Tick, distance3D, colorize } from '../utils'
+import { Delay, Loop } from 'utils/web'
+import { Tick, distance3D, colorize } from '../utils'
 
 class ThreeView {
 
@@ -61,7 +61,7 @@ class ThreeView {
         /** Setup Cameras **/
         this.camera.position.z = 1
         this.camera.up.fromArray([0, 0, 1])
-        this.camera.position.z = 1
+        this.camera.position.z = 25
 
         /** Setup Controllers **/
         this.controls = new OrbitControls(this.camera, this.renderer.domElement)

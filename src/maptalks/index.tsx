@@ -23,8 +23,8 @@ class MapView {
     })
 
     conf: any = {
-        lat: 47.92061659187936,
-        lon: 106.9174311698285,
+        lat: 43.67338010130343,
+        lon: 105.49508346330428,
         prevPos: [0, 0],
         readyCallback: (...e: any) => { },
         updateCallback: (...e: any) => { },
