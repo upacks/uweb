@@ -62,9 +62,12 @@ export class Vehicle {
 
     }
 
-    update = (args: any) => Safe(() => {
+    update = ({ MP, map, rotate }: {
+        MP: { x: number, y: number, z: number },
+        map: [number, number, number],
+        rotate: [number, number, number],
+    }) => Safe(() => {
 
-        const { MP, map, rotate } = args
         const { x, y, z } = MP
         this.TruckThree.position.fromArray([x, y, z])
         this.TruckThree.rotation.fromArray(rotate)
@@ -72,7 +75,6 @@ export class Vehicle {
         const position = this.Maptalks.threeLayer.coordinateToVector3({ x: map[1], y: map[0], z: 0 }, 0)
         this.TruckMap.getObject3d().position.copy(position)
         this.TruckMap.getObject3d().rotation.fromArray(rotate)
-        // this.Maptalks.animateTo([map[1], map[0], map[2]], 2)
 
     })
 
