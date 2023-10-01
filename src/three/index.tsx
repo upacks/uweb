@@ -79,7 +79,7 @@ class ThreeView {
 
         /** Add Canvas **/
         const container: any = document.getElementById(this.conf.containerId)
-        container.appendChild(this.conf.stats.dom)
+        this.conf.stats && container.appendChild(this.conf.stats.dom)
         container.appendChild(this.renderer.domElement)
 
         const { width, height } = container.getBoundingClientRect()
@@ -89,14 +89,16 @@ class ThreeView {
         this.camera.updateProjectionMatrix()
 
         this.renderer.setAnimationLoop((time: number) => {
-            this.conf.stats.begin()
+
+            this.conf.stats && this.conf.stats.begin()
 
             if (this.viewHelper && this.viewHelper.animating) this.viewHelper.update(this.conf.clock.getDelta())
             this.conf.updateCallback && this.conf.updateCallback()
             this.renderer.render(this.scene, this.camera)
             this.viewHelper && this.viewHelper.render(this.renderer)
 
-            this.conf.stats.end()
+            this.conf.stats && this.conf.stats.end()
+
         })
 
         Delay(() => this.conf.readyCallback(), 0)

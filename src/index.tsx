@@ -3,7 +3,7 @@ import { ThreeView } from './three'
 import { MapView } from './maptalks'
 import { Vehicle, Toyota } from './utils'
 
-import { log, Delay } from 'utils/web'
+import { log, Loop, Delay } from 'utils/web'
 
 const { useState, useEffect, useRef } = React
 
@@ -38,11 +38,12 @@ const main = ({ isDarkMode }: any) => {
                     Three: v1.current,
                 })
 
+                let i = 0
                 Delay(() => {
                     vehicle.update({
-                        map: [ll[0], ll[1], 0],
+                        map: [ll[0], ll[1] + (++i / 1000), 0],
                         rotate: [0, 0, 0],
-                        MP: { x: en[0], y: en[1], z: 0 }
+                        MP: { x: en[0] + (++i), y: en[1], z: 0 }
                     })
                 }, 500)
 
@@ -60,6 +61,7 @@ const main = ({ isDarkMode }: any) => {
         v1.current = new ThreeView({
             containerId: 'render_1',
             simulate: true,
+            stats: null,
             isDarkMode,
         })
 

@@ -26,6 +26,7 @@ class MapView {
         lat: 43.67338010130343,
         lon: 105.49508346330428,
         prevPos: [0, 0],
+        animateDuration: 500,
         readyCallback: (...e: any) => { },
         updateCallback: (...e: any) => { },
     }
@@ -52,13 +53,13 @@ class MapView {
                 }),
             })
 
-            this.map.on('moveend', () => {
+            /* this.map.on('moveend', () => {
                 const projection = this.map.getProjection();
                 const center = this.map.getCenter()
                 const containerPoint = this.map.coordinateToContainerPoint(center).round()
                 const prj = projection.project(center)
-                log.info(Sfy({ projection, center, prj, containerPoint }))
-            })
+                // log.info(Sfy({ projection, center, prj, containerPoint }))
+            }) */
 
             this.threeLayer.prepareToDraw = (gl, scene, camera) => {
 
@@ -95,7 +96,7 @@ class MapView {
         try {
             const d = distanceLatLon(p[0], p[1], this.conf.prevPos[0], this.conf.prevPos[1])
             if (d > threshold) {
-                this.map.animateTo({ center: [p[0], p[1]] }, { duration: 500 })
+                this.map.animateTo({ center: [p[0], p[1]] }, { duration: this.conf.animateDuration })
                 this.conf.prevPos = p
             }
         } catch (err: any) {
@@ -129,7 +130,7 @@ class MapView {
         if (position === 'BACK' && back && front) {
 
             const bearing = this.getBearing(point([back[1], back[0]]), point([front[1], front[0]]))
-            this.map.animateTo({ bearing: bearing, center: [front[1], front[0]] }, { duration: 500 })
+            this.map.animateTo({ bearing: bearing, center: [front[1], front[0]] }, { duration: this.conf.animateDuration })
 
         }
 
