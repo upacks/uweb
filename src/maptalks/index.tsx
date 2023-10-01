@@ -27,6 +27,7 @@ class MapView {
         lon: 105.49508346330428,
         prevPos: [0, 0],
         animateDuration: 500,
+        urlTemplate: 'http://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
         readyCallback: (...e: any) => { },
         updateCallback: (...e: any) => { },
     }
@@ -43,10 +44,10 @@ class MapView {
                 maxZoom: 22,
                 minZoom: 13,
                 pitch: 45,
-                centerCross: true,
+                centerCross: false,
                 doubleClickZoom: false,
                 baseLayer: new TileLayer('base', {
-                    urlTemplate: 'http://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    urlTemplate: this.conf.urlTemplate,
                     subdomains: ["a", "b", "c", "d"],
                     attribution: '&copy; <a href="https://gearlink.cc/">GearLink</a>',
                     cssFilter: this.getFilter(this.conf.isDarkMode),
