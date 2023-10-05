@@ -1,11 +1,11 @@
 import { React, Render, Typography, Row, Col } from './react'
 import { ThreeView } from './three'
 import { MapView } from './maptalks'
-import { Vehicle, Toyota } from './utils'
+import { Vehicle, Toyota, Dozer, Drill } from './utils'
 
 import { log, Loop, Delay } from 'utils/web'
 
-const { useState, useEffect, useRef } = React
+const { useEffect, useRef } = React
 
 const { Title } = Typography
 
@@ -38,15 +38,6 @@ const main = ({ isDarkMode }: any) => {
                     Three: v1.current,
                 })
 
-                /* let i = 0
-                Delay(() => {
-                    vehicle.update({
-                        map: [ll[0], ll[1] + (++i / 1000), 0],
-                        rotate: [0, 0, 0],
-                        MP: { x: en[0] + (++i), y: en[1], z: 0 }
-                    })
-                }, 500) */
-
             }
         }
 
@@ -65,7 +56,7 @@ const main = ({ isDarkMode }: any) => {
             isDarkMode,
         })
 
-        Toyota.then((Truck: any) => {
+        Drill({ size: 50, x: 0, y: 0, z: 0 }).then((Truck: any) => {
             t0.current = Truck
             onReady('Toyota is ready')
         })

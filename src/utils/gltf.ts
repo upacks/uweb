@@ -1,27 +1,116 @@
 import * as THREE from 'three'
-import { log, Safe, Loop, Win, Doc, Sfy } from 'utils/web'
+import { Safe } from 'utils/web'
 
 const { GLTFLoader } = require('three/addons/loaders/GLTFLoader.js')
-const Loader = new GLTFLoader()
-
 const SkeletonUtils = require('three/addons/utils/SkeletonUtils.js')
-
-const UTMLatLng = require('./utm.js')
-const UTM = new UTMLatLng('WGS 84')
+const Loader = new GLTFLoader()
 
 interface iGLTF {
     MapPivot: THREE.Group
     ThreePivot: THREE.Group
 }
 
-export const Toyota: Promise<iGLTF> = new Promise((res) => Loader.load('./hilux.glb', (gltf: any) => {
+export const Drill = (
+
+    /** Ignoring the config, since calculation is bit difficult **/
+    { size = 50, x = 0, y = 0, z = 0 }: { size: number, x: number, y: number, z: number }
+
+): Promise<iGLTF> => new Promise((res) => {
+
+    Loader.load('./drill/body/scene.gltf', (gltf: any) => compile(gltf.scene, null))
+    Loader.load('./drill/bit/scene.gltf', (gltf: any) => compile(null, gltf.scene))
+
+    let crane: any = null
+    let bit: any = null
+
+    const compile = (_crane: any, _bit: any) => {
+
+        if (_crane) { crane = _crane }
+        if (_bit) { bit = _bit }
+        if (crane && bit) {
+
+            const scale = 0.003
+            const sbit = 0.0025
+            const div = 45
+
+            crane.rotation.set(Math.PI / 2, Math.PI, 0)
+            crane.position.set(0, -1800, 150)
+
+            bit.rotation.set(Math.PI * 2, Math.PI / 2, 0)
+            bit.position.set(-1680, -80, -1350)
+            bit.scale.set(sbit, sbit, sbit)
+
+            const threeCrane = SkeletonUtils.clone(crane)
+            const threeBit = SkeletonUtils.clone(bit)
+
+            const mapCrane = SkeletonUtils.clone(crane)
+            const mapBit = SkeletonUtils.clone(bit)
+
+            const ThreePivot = new THREE.Group()
+            ThreePivot.add(threeCrane)
+            ThreePivot.add(threeBit)
+            ThreePivot.matrixWorldNeedsUpdate = true
+            ThreePivot.updateMatrixWorld(true)
+            ThreePivot.scale.set(scale, scale, scale)
+
+            const MapPivot = new THREE.Group()
+            MapPivot.add(mapCrane)
+            MapPivot.add(mapBit)
+            MapPivot.matrixWorldNeedsUpdate = true
+            MapPivot.updateMatrixWorld(true)
+            MapPivot.scale.set(scale / div, scale / div, scale / div)
+
+            res({ MapPivot, ThreePivot })
+        }
+
+    }
+
+})
+
+export const Dozer = (
+
+    { size = 50, x = 0, y = 0, z = 0 }: { size: number, x: number, y: number, z: number }
+
+): Promise<iGLTF> => new Promise((res) => Loader.load('./dozer/scene.gltf', (gltf: any) => {
 
     const scene = gltf.scene
-    const scale = 0.025
-    const div = 50
+    const scale = size / 250 // 0.2
+    const div = 45
+
+    scene.rotation.set(Math.PI / 2, 0, 0)
+    scene.position.set(-1.25 + (x / 10), -13.25 - (y / 10), 1.25 + (z / 10))
+
+    const mapScene = SkeletonUtils.clone(scene)
+    const threeScene = SkeletonUtils.clone(scene)
+
+    const ThreePivot = new THREE.Group()
+    ThreePivot.add(threeScene)
+    ThreePivot.matrixWorldNeedsUpdate = true
+    ThreePivot.updateMatrixWorld(true)
+    ThreePivot.scale.set(scale, scale, scale)
+
+    const MapPivot = new THREE.Group()
+    MapPivot.add(mapScene)
+    MapPivot.matrixWorldNeedsUpdate = true
+    MapPivot.updateMatrixWorld(true)
+    MapPivot.scale.set(scale / div, scale / div, scale / div)
+
+    res({ MapPivot, ThreePivot })
+
+}))
+
+export const Toyota = (
+
+    { size = 50, x = 0, y = 0, z = 0 }: { size: number, x: number, y: number, z: number }
+
+): Promise<iGLTF> => new Promise((res) => Loader.load('./hilux.glb', (gltf: any) => {
+
+    const scene = gltf.scene
+    const scale = (size - 23) / 1000
+    const div = 45
 
     scene.rotation.set(Math.PI / 2, -Math.PI / 2, 0)
-    scene.position.set(0, -90, 0)
+    scene.position.set(x, (-90) - y, z)
 
     const mapScene = SkeletonUtils.clone(scene)
     const threeScene = SkeletonUtils.clone(scene)
@@ -44,50 +133,91 @@ export const Toyota: Promise<iGLTF> = new Promise((res) => Loader.load('./hilux.
 
 export class Vehicle {
 
-    Three
     Maptalks
-
     TruckMap
+    isM = false
+
+    Three
     TruckThree
+    isT = false
 
     constructor({ Truck, Maptalks, Three }: any) {
 
-        this.Three = Three
-        this.Maptalks = Maptalks
+        this.Maptalks = Maptalks ?? null
+        this.Three = Three ?? null
 
-        this.TruckMap = Maptalks.threeLayer.toModel(Truck.MapPivot)
-        this.TruckThree = Truck.ThreePivot
-        Maptalks.threeLayer.addMesh(this.TruckMap)
-        Three.scene.add(Truck.ThreePivot)
+        if (this.Maptalks) {
 
-        const changeCursor = (coll: any, value: string) => {
-            for (var i = 0, len = coll.length; i < len; i++) {
-                coll[i].style["cursor"] = value
+            this.isM = true
+
+            this.TruckMap = Maptalks.threeLayer.toModel(Truck.MapPivot)
+            this.Maptalks.threeLayer.addMesh(this.TruckMap)
+
+            const changeCursor = (coll: any, value: string) => {
+                for (var i = 0, len = coll.length; i < len; i++) {
+                    coll[i].style["cursor"] = value
+                }
             }
+
+            const can: any = document.getElementsByClassName('maptalks-canvas-layer')
+
+            this.TruckMap.on("click", () => { console.log("CLICK") })
+            this.TruckMap.on("dblclick", () => {
+                changeCursor(can, 'wait')
+                console.log("CLICK*2")
+            })
+
+            this.TruckMap.on("mouseenter", () => {
+                changeCursor(can, 'pointer')
+                console.log("ENTER")
+            })
+
+            this.TruckMap.on("mouseout", () => {
+                changeCursor(can, 'auto')
+                console.log("OUT")
+            })
+
         }
 
-        const can: any = document.getElementsByClassName('maptalks-canvas-layer')
+        if (this.Three) {
 
-        console.log(can)
+            this.isT = true
 
-        this.TruckMap.on("click", () => { console.log("CLICK") })
-        this.TruckMap.on("dblclick", () => {
-            changeCursor(can, 'wait')
-            console.log("CLICK*2")
-        })
+            this.TruckThree = Truck.ThreePivot
+            this.Three.scene.add(this.TruckThree)
 
-        this.TruckMap.on("mouseenter", () => {
-            changeCursor(can, 'pointer')
-            console.log("ENTER")
-        })
-
-        this.TruckMap.on("mouseout", () => {
-            changeCursor(can, 'auto')
-            console.log("OUT")
-        })
+        }
 
     }
 
+    position = (
+
+        { gps = [0, 0, 0], utm = [0, 0, 0], r = [0, 0, 0] }: { gps: [number, number, number], utm: [number, number, number], r: [number, number, number] }
+
+    ) => {
+
+        try {
+
+            if (this.isM) {
+
+                const position = this.Maptalks.threeLayer.coordinateToVector3({ x: gps[1], y: gps[0], z: 0 }, 0)
+                this.TruckMap.getObject3d().position.copy(position)
+                this.TruckMap.getObject3d().rotation.fromArray(r)
+
+            }
+
+            if (this.isT) {
+
+                this.TruckThree.position.fromArray(utm)
+                this.TruckThree.rotation.fromArray(r)
+
+            }
+
+        } catch { return null }
+
+    }
+
+    /* Deprecated */
     update = ({ MP, map, rotate }: {
 
         MP: { x: number, y: number, z: number },
@@ -96,13 +226,21 @@ export class Vehicle {
 
     }) => Safe(() => {
 
-        const { x, y, z } = MP
-        this.TruckThree.position.fromArray([x, y, z])
-        this.TruckThree.rotation.fromArray(rotate)
+        if (this.isM) {
 
-        const position = this.Maptalks.threeLayer.coordinateToVector3({ x: map[1], y: map[0], z: 0 }, 0)
-        this.TruckMap.getObject3d().position.copy(position)
-        this.TruckMap.getObject3d().rotation.fromArray(rotate)
+            const position = this.Maptalks.threeLayer.coordinateToVector3({ x: map[1], y: map[0], z: 0 }, 0)
+            this.TruckMap.getObject3d().position.copy(position)
+            this.TruckMap.getObject3d().rotation.fromArray(rotate)
+
+        }
+
+        if (this.isT) {
+
+            const { x, y, z } = MP
+            this.TruckThree.position.fromArray([x, y, z])
+            this.TruckThree.rotation.fromArray(rotate)
+
+        }
 
     })
 
