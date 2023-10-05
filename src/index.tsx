@@ -9,10 +9,7 @@ const { useEffect, useRef } = React
 
 const { Title } = Typography
 
-console.log('Toyota', Toyota)
-
 const ll = [43.67338010130343, 105.49508346330428, 0]
-const en = [0, 0, 0] // [539910, 4835716, 0]
 
 const main = ({ isDarkMode }: any) => {
 
@@ -37,6 +34,12 @@ const main = ({ isDarkMode }: any) => {
                     Maptalks: v0.current,
                     Three: v1.current,
                 })
+
+                vehicle.on((type, arg) => {
+                    console.log(type, arg)
+                })
+
+                Delay(() => { vehicle.remove() }, 5000)
 
             }
         }

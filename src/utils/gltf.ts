@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { Safe } from 'utils/web'
+import { Safe, log } from 'utils/web'
 
 const { GLTFLoader } = require('three/addons/loaders/GLTFLoader.js')
 const SkeletonUtils = require('three/addons/utils/SkeletonUtils.js')
@@ -141,6 +141,11 @@ export class Vehicle {
     TruckThree
     isT = false
 
+    callback: any = (...n: any) => { }
+
+    canvas: any = document.getElementsByClassName('maptalks-canvas-layer')
+    changeCursor = (coll: any, value: string) => { for (var i = 0, len = coll.length; i < len; i++) coll[i].style["cursor"] = value }
+
     constructor({ Truck, Maptalks, Three }: any) {
 
         this.Maptalks = Maptalks ?? null
@@ -153,28 +158,22 @@ export class Vehicle {
             this.TruckMap = Maptalks.threeLayer.toModel(Truck.MapPivot)
             this.Maptalks.threeLayer.addMesh(this.TruckMap)
 
-            const changeCursor = (coll: any, value: string) => {
-                for (var i = 0, len = coll.length; i < len; i++) {
-                    coll[i].style["cursor"] = value
-                }
-            }
+            this.TruckMap.on("click", () => {
+                this.callback('mouse', 'click')
+            })
 
-            const can: any = document.getElementsByClassName('maptalks-canvas-layer')
-
-            this.TruckMap.on("click", () => { console.log("CLICK") })
             this.TruckMap.on("dblclick", () => {
-                changeCursor(can, 'wait')
-                console.log("CLICK*2")
+                this.callback('mouse', 'dblclick')
             })
 
             this.TruckMap.on("mouseenter", () => {
-                changeCursor(can, 'pointer')
-                console.log("ENTER")
+                this.changeCursor(this.canvas, 'pointer')
+                this.callback('mouse', 'enter')
             })
 
             this.TruckMap.on("mouseout", () => {
-                changeCursor(can, 'auto')
-                console.log("OUT")
+                this.changeCursor(this.canvas, 'auto')
+                this.callback('mouse', 'out')
             })
 
         }
@@ -189,6 +188,8 @@ export class Vehicle {
         }
 
     }
+
+    on = (cb: (event_name: string, args: any) => any) => { this.callback = cb }
 
     position = (
 
@@ -212,6 +213,8 @@ export class Vehicle {
                 this.TruckThree.rotation.fromArray(r)
 
             }
+
+            this.callback('position', { gps, utm, r })
 
         } catch { return null }
 
@@ -243,5 +246,33 @@ export class Vehicle {
         }
 
     })
+
+    /** Dispose object **/
+    remove = () => {
+
+        try {
+
+            if (this.isM) {
+
+                this.changeCursor(this.canvas, 'auto')
+                /* const mNodes: any = []
+                this.TruckMap.traverse((child: any) => { mNodes.push(child) })
+                mNodes.forEach((node: any) => { node.removeFromParent() }) */
+                this.Maptalks.threeLayer.removeMesh(this.TruckMap)
+
+            }
+
+            if (this.isT) {
+
+                /* const tNodes: any = []
+                this.TruckThree.traverse((child: any) => { tNodes.push(child) })
+                tNodes.forEach((node: any) => { node.removeFromParent() }) */
+                this.Three.scene.remove(this.TruckThree)
+
+            }
+
+        } catch (err: any) { log.error(`[Vehicle]: Remove / ${err.message}`) }
+
+    }
 
 }
