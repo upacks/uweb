@@ -60,12 +60,40 @@ export class Vehicle {
         Maptalks.threeLayer.addMesh(this.TruckMap)
         Three.scene.add(Truck.ThreePivot)
 
+        const changeCursor = (coll: any, value: string) => {
+            for (var i = 0, len = coll.length; i < len; i++) {
+                coll[i].style["cursor"] = value
+            }
+        }
+
+        const can: any = document.getElementsByClassName('maptalks-canvas-layer')
+
+        console.log(can)
+
+        this.TruckMap.on("click", () => { console.log("CLICK") })
+        this.TruckMap.on("dblclick", () => {
+            changeCursor(can, 'wait')
+            console.log("CLICK*2")
+        })
+
+        this.TruckMap.on("mouseenter", () => {
+            changeCursor(can, 'pointer')
+            console.log("ENTER")
+        })
+
+        this.TruckMap.on("mouseout", () => {
+            changeCursor(can, 'auto')
+            console.log("OUT")
+        })
+
     }
 
     update = ({ MP, map, rotate }: {
+
         MP: { x: number, y: number, z: number },
         map: [number, number, number],
         rotate: [number, number, number],
+
     }) => Safe(() => {
 
         const { x, y, z } = MP

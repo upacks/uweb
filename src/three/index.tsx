@@ -134,7 +134,7 @@ class ThreeView {
 
     }
 
-    setMode = (isDark: boolean) => { this.scene.background = isDark ? new THREE.Color('#333') : new THREE.Color('#e5e5e5') }
+    setMode = (isDark: boolean) => { this.scene.background = isDark ? new THREE.Color('#0d1016') : new THREE.Color('#bfb9b3') }
     onUpdate = (cb: any) => this.conf.updateCallback = cb
     onReady = (cb: any) => this.conf.readyCallback = cb
     emit = (name: string, data: any) => { for (const cb of this.conf.cbs[name] ?? []) { try { cb(data) } catch (err) { } } }

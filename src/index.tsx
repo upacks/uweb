@@ -38,14 +38,14 @@ const main = ({ isDarkMode }: any) => {
                     Three: v1.current,
                 })
 
-                let i = 0
+                /* let i = 0
                 Delay(() => {
                     vehicle.update({
                         map: [ll[0], ll[1] + (++i / 1000), 0],
                         rotate: [0, 0, 0],
                         MP: { x: en[0] + (++i), y: en[1], z: 0 }
                     })
-                }, 500)
+                }, 500) */
 
             }
         }
