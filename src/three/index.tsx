@@ -119,6 +119,17 @@ class ThreeView {
 
     }
 
+    update = ([x, y, z]: number[], [x1, y1, z1]: number[]) => {
+
+        this.updateHelpers([x1, y1, z1])
+        if (!this.conf.tick.can()) { return 'panning' }
+
+        this.camera.position.set(x, y, z)
+        this.camera.lookAt(x1, y1, z1)
+
+    }
+
+    /** Deprecated! **/
     view = (position = 'TOP', { camera, MP }: {
         camera: { top: { x: number, y: number, z: number }, right: { x: number, y: number, z: number }, back: { x: number, y: number, z: number } },
         MP: { x: number, y: number, z: number },
