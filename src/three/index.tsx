@@ -129,22 +129,6 @@ class ThreeView {
 
     }
 
-    /** Deprecated! **/
-    view = (position = 'TOP', { camera, MP }: {
-        camera: { top: { x: number, y: number, z: number }, right: { x: number, y: number, z: number }, back: { x: number, y: number, z: number } },
-        MP: { x: number, y: number, z: number },
-    }) => {
-
-        this.updateHelpers([MP.x, MP.y, MP.z])
-        if (!this.conf.tick.can()) { return 'panning' }
-
-        position === 'TOP' && this.camera.position.set(camera.top.x, camera.top.y, camera.top.z)
-        position === 'RIGHT' && this.camera.position.set(camera.right.x, camera.right.y, camera.right.z)
-        position === 'BACK' && this.camera.position.set(camera.back.x, camera.back.y, camera.back.z)
-        this.camera.lookAt(MP.x, MP.y, MP.z)
-
-    }
-
     setMode = (isDark: boolean) => { this.scene.background = isDark ? new THREE.Color('#0d1016') : new THREE.Color('#bfb9b3') }
     onUpdate = (cb: any) => this.conf.updateCallback = cb
     onReady = (cb: any) => this.conf.readyCallback = cb

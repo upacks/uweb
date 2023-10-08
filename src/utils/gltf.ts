@@ -193,7 +193,8 @@ export class Vehicle {
 
     update = (
 
-        { gps = [0, 0], utm = [0, 0], z = 0, r = 0 }: { gps: [number, number], utm: [number, number], r: number, z: number }
+        { gps = [0, 0, 0], utm = [0, 0, 0], head = 0 }:
+            { gps: [number, number, number], utm: [number, number, number], head: number }
 
     ) => {
 
@@ -203,49 +204,22 @@ export class Vehicle {
 
                 const position = this.Maptalks.threeLayer.coordinateToVector3({ x: gps[0], y: gps[1], z: 0 }, 0)
                 this.TruckMap.getObject3d().position.copy(position)
-                this.TruckMap.getObject3d().rotation.fromArray([0, 0, r])
+                this.TruckMap.getObject3d().rotation.fromArray([0, 0, head])
 
             }
 
             if (this.isT) {
 
-                this.TruckThree.position.fromArray([utm[0], utm[1], z])
-                this.TruckThree.rotation.fromArray([0, 0, r])
+                this.TruckThree.position.fromArray(utm)
+                this.TruckThree.rotation.fromArray([0, 0, head])
 
             }
 
-            this.callback('position', { gps, utm, r })
+            this.callback('position', { gps, utm, head })
 
         } catch { return null }
 
     }
-
-    /* Deprecated */
-    view = ({ MP, map, rotate }: {
-
-        MP: { x: number, y: number, z: number },
-        map: [number, number, number],
-        rotate: [number, number, number],
-
-    }) => Safe(() => {
-
-        if (this.isM) {
-
-            const position = this.Maptalks.threeLayer.coordinateToVector3({ x: map[0], y: map[1], z: 0 }, 0)
-            this.TruckMap.getObject3d().position.copy(position)
-            this.TruckMap.getObject3d().rotation.fromArray(rotate)
-
-        }
-
-        if (this.isT) {
-
-            const { x, y, z } = MP
-            this.TruckThree.position.fromArray([x, y, z])
-            this.TruckThree.rotation.fromArray(rotate)
-
-        }
-
-    })
 
     /** Dispose object **/
     remove = () => {
