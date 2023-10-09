@@ -35,18 +35,54 @@ export const Coordinate = (...n: any) => {
 /** General color range **/
 export const colorize = (actual: number, [c5, c4, c3, c2, c1]: any) => {
 
-    const cl5 = '#ff0000'
+    const cl5 = '#ff0000' // red
     const cl4 = '#ffa700'
-    const cl3 = '#fff400'
+    const cl3 = '#fff400' // yellow
     const cl2 = '#a3ff00'
-    const cl1 = '#2cba00'
+    const cl1 = '#2cba00' // green
 
     if (c1 >= actual) return cl1
     if (c2 >= actual) return cl2
     if (c3 >= actual) return cl3
     if (c4 >= actual) return cl4
     if (c5 >= actual) return cl5
-    return cl5
+    return '#1668dc' // blue
+
+}
+
+/** COLOR Actual <= Target[0]... [ 1(r) -> 5(g) ] **/
+export const ColorR2G = (actual: number, [c1 = 10, c2 = 25, c3 = 50, c4 = 75, c5 = 100]: number[]) => {
+
+    const cl1 = '#ff0000' // red
+    const cl2 = '#ffa700'
+    const cl3 = '#fff400' // yellow
+    const cl4 = '#a3ff00'
+    const cl5 = '#2cba00' // green
+
+    if (actual <= c1) return cl1
+    if (actual <= c2) return cl2
+    if (actual <= c3) return cl3
+    if (actual <= c4) return cl4
+    if (actual <= c5) return cl5
+    return '#1668dc' // blue
+
+}
+
+/** COLOR Actual <= Target[0]... [ 1(g) -> 5(r) ] **/
+export const ColorG2R = (actual: number, [c1 = 10, c2 = 25, c3 = 50, c4 = 75, c5 = 100]: number[]) => {
+
+    const cl1 = '#2cba00' // green
+    const cl2 = '#a3ff00'
+    const cl3 = '#fff400' // yellow
+    const cl4 = '#ffa700'
+    const cl5 = '#ff0000' // red
+
+    if (actual <= c1) return cl1
+    if (actual <= c2) return cl2
+    if (actual <= c3) return cl3
+    if (actual <= c4) return cl4
+    if (actual <= c5) return cl5
+    return '#1668dc' // blue
 
 }
 
