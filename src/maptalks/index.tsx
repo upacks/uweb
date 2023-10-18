@@ -40,9 +40,9 @@ class MapView {
 
             this.map = new Map(this.conf.containerId, {
                 center: [this.conf.lon, this.conf.lat],
-                zoom: this.conf.zoom ?? 19,
-                maxZoom: 22,
-                minZoom: 13,
+                zoom: this.conf.zoom ?? 20,
+                maxZoom: 21,
+                minZoom: 15,
                 pitch: 45,
                 centerCross: false,
                 doubleClickZoom: false,
@@ -53,14 +53,6 @@ class MapView {
                     cssFilter: this.getFilter(this.conf.isDarkMode),
                 }),
             })
-
-            /* this.map.on('moveend', () => {
-                const projection = this.map.getProjection();
-                const center = this.map.getCenter()
-                const containerPoint = this.map.coordinateToContainerPoint(center).round()
-                const prj = projection.project(center)
-                // log.info(Sfy({ projection, center, prj, containerPoint }))
-            }) */
 
             this.threeLayer.prepareToDraw = (gl, scene, camera) => {
 
@@ -81,7 +73,8 @@ class MapView {
 
             const update = () => {
 
-                setTimeout(() => requestAnimationFrame(update), 1000 / (this.conf.fps ?? 30))
+                setTimeout(() => requestAnimationFrame(update), 1000 / (this.conf.fps ?? 25))
+
                 this.conf.updateCallback && this.conf.updateCallback()
                 this.threeLayer._needsUpdate && !this.threeLayer.isRendering() && this.threeLayer.redraw()
 

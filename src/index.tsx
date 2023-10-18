@@ -39,7 +39,7 @@ const main = ({ isDarkMode }: any) => {
                     console.log(type, arg)
                 })
 
-                Delay(() => { vehicle.remove() }, 5000)
+                // Delay(() => { vehicle.remove() }, 5000)
 
             }
         }
@@ -49,7 +49,8 @@ const main = ({ isDarkMode }: any) => {
             simulate: true,
             isDarkMode,
             lat: ll[0],
-            lon: ll[1]
+            lon: ll[1],
+            fps: 5,
         })
 
         v1.current = new ThreeView({
@@ -57,6 +58,7 @@ const main = ({ isDarkMode }: any) => {
             simulate: true,
             stats: null,
             isDarkMode,
+            fps: 5,
         })
 
         Drill({ size: 50, x: 0, y: 0, z: 0 }).then((Truck: any) => {

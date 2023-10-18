@@ -88,7 +88,9 @@ class ThreeView {
         this.camera.aspect = width / height
         this.camera.updateProjectionMatrix()
 
-        this.renderer.setAnimationLoop((time: number) => {
+        const update = () => {
+
+            setTimeout(() => requestAnimationFrame(update), 1000 / (this.conf.fps ?? 25))
 
             this.conf.stats && this.conf.stats.begin()
 
@@ -99,9 +101,11 @@ class ThreeView {
 
             this.conf.stats && this.conf.stats.end()
 
-        })
+        }
 
         Delay(() => this.conf.readyCallback(), 0)
+
+        update()
 
     }
 
