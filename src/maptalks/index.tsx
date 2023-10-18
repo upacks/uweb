@@ -40,9 +40,9 @@ class MapView {
 
             this.map = new Map(this.conf.containerId, {
                 center: [this.conf.lon, this.conf.lat],
-                zoom: this.conf.zoom ?? 20,
-                maxZoom: 21,
-                minZoom: 15,
+                zoom: this.conf.zoom ?? 19,
+                maxZoom: 20,
+                minZoom: 16,
                 pitch: 45,
                 centerCross: false,
                 doubleClickZoom: false,
