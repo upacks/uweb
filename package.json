@@ -1,6 +1,6 @@
 {
     "name": "uweb",
-    "version": "0.0.38",
+    "version": "0.0.39",
     "repository": "git@github.com:upacks/uweb.git",
     "author": "gantulga.khuyag@gmail.com",
     "license": "MIT",
@@ -42,7 +42,7 @@
     },
     "scripts": {
         "start": "ubin watch_app",
-        "build": "ubin build_app --bundle --port 3003",
+        "build": "ubin build_app --bundle --port 3009",
         "serve": "node ./dist/run.js",
         "release": "yarn version --patch && git add . && git push",
         "_build": "tsc -p tsconfig.json"
