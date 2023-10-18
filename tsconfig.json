@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
-        "target": "esnext",
+        "target": "ESNext",
         "module": "ESNext",
+        "moduleResolution": "Node16",
         "allowJs": true,
         "jsx": "preserve",
         "removeComments": true,
@@ -16,7 +17,6 @@
         "esModuleInterop": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "moduleResolution": "Bundler",
         "skipLibCheck": true,
         "outDir": "dist",
         "typeRoots": [
