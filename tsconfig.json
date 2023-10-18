@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "esnext",
-        "module": "ESNext",
+        "module": "Node16",
         "allowJs": true,
         "jsx": "preserve",
         "removeComments": true,
