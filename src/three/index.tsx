@@ -20,7 +20,10 @@ class ThreeView {
     }
 
     scene = new THREE.Scene()
-    renderer = new THREE.WebGLRenderer({ antialias: true })
+    renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        preserveDrawingBuffer: true,
+    })
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 10000)
     controls: any = {}
     raycaster: any = {}
