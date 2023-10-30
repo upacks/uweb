@@ -35,6 +35,9 @@ class MapView {
     constructor(conf: any) {
 
         this.conf = { ...this.conf, ...conf }
+        const optional: any = {
+            devicePixelRatio: this.conf.devicePixelRatio ?? 1,
+        }
 
         /** @_setup_map_ **/ Delay(() => {
 
@@ -46,6 +49,7 @@ class MapView {
                 pitch: 45,
                 centerCross: false,
                 doubleClickZoom: false,
+                ...optional,
                 baseLayer: new TileLayer('base', {
                     urlTemplate: this.conf.urlTemplate,
                     subdomains: ["a", "b", "c", "d"],

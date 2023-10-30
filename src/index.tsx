@@ -48,9 +48,10 @@ const main = ({ isDarkMode }: any) => {
             containerId: 'render_0',
             simulate: true,
             isDarkMode,
+            urlTemplate: `https://c.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png`,
             lat: ll[0],
             lon: ll[1],
-            fps: 5,
+            fps: 60,
         })
 
         v1.current = new ThreeView({
@@ -58,7 +59,7 @@ const main = ({ isDarkMode }: any) => {
             simulate: true,
             stats: null,
             isDarkMode,
-            fps: 5,
+            fps: 60,
         })
 
         Drill({ size: 50, x: 0, y: 0, z: 0 }).then((Truck: any) => {
