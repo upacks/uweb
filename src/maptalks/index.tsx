@@ -34,7 +34,11 @@ class MapView {
 
     constructor(conf: any) {
 
-        this.conf = { ...this.conf, ...conf }
+        this.conf = {
+            ...this.conf,
+            ...conf,
+        }
+
         const optional: any = {
             devicePixelRatio: this.conf.devicePixelRatio ?? 1,
         }
@@ -44,11 +48,11 @@ class MapView {
             this.map = new Map(this.conf.containerId, {
                 center: [this.conf.lon, this.conf.lat],
                 zoom: this.conf.zoom ?? 19,
-                maxZoom: 20,
-                minZoom: 16,
-                pitch: 45,
+                maxZoom: this.conf.maxZoom ?? 20,
+                minZoom: this.conf.minZoom ?? 16,
+                pitch: this.conf.pitch ?? 45,
+                doubleClickZoom: this.conf.doubleClickZoom ?? false,
                 centerCross: false,
-                doubleClickZoom: false,
                 ...optional,
                 baseLayer: new TileLayer('base', {
                     urlTemplate: this.conf.urlTemplate,
