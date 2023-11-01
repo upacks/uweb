@@ -52,6 +52,7 @@ const main = ({ isDarkMode }: any) => {
             lat: ll[0],
             lon: ll[1],
             fps: 60,
+            devicePixelRatio: 0.2,
         })
 
         v1.current = new ThreeView({
