@@ -20,10 +20,7 @@ class ThreeView {
     }
 
     scene = new THREE.Scene()
-    renderer = new THREE.WebGLRenderer({
-        antialias: true,
-        preserveDrawingBuffer: true,
-    })
+    renderer: any = {}
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 10000)
     controls: any = {}
     raycaster: any = {}
@@ -38,6 +35,18 @@ class ThreeView {
     constructor(conf: any) {
 
         this.conf = { ...this.conf, ...conf }
+
+        const antialias = this.conf.hasOwnProperty('antialias') ? this.conf.antialias : true
+
+        this.renderer = new THREE.WebGLRenderer({
+            antialias
+            // preserveDrawingBuffer: true,
+        })
+
+        if (this.conf.hasOwnProperty('devicePixelRatio')) {
+            const ratio = this.conf.devicePixelRatio ?? 1
+            this.renderer.setPixelRatio(ratio)
+        }
 
         /** @_setup_three_ **/ Delay(() => {
 
