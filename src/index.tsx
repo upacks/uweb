@@ -29,17 +29,17 @@ const main = ({ isDarkMode }: any) => {
 
                 log.success(`Master is ready`)
 
-                const vehicle = new Vehicle({
+                new Vehicle({
                     Truck: t0.current,
                     Maptalks: v0.current,
                     Three: v1.current,
                 })
 
-                vehicle.on((type, arg) => {
-                    console.log(type, arg)
+                new Vehicle({
+                    Truck: t0.current,
+                    Maptalks: v0.current,
+                    Three: v1.current,
                 })
-
-                // Delay(() => { vehicle.remove() }, 5000)
 
             }
         }
@@ -51,8 +51,8 @@ const main = ({ isDarkMode }: any) => {
             urlTemplate: `https://c.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png`,
             lat: ll[0],
             lon: ll[1],
-            fps: 10,
-            devicePixelRatio: 0.5,
+            // fps: 10,
+            // devicePixelRatio: 0.5,
         })
 
         v1.current = new ThreeView({
@@ -60,12 +60,17 @@ const main = ({ isDarkMode }: any) => {
             simulate: true,
             stats: false,
             isDarkMode,
-            fps: 10,
-            devicePixelRatio: 0.2,
+            // fps: 10,
+            // devicePixelRatio: 0.2,
             antialias: false,
         })
 
         Drill({ size: 50, x: 0, y: 0, z: 0 }).then((Truck: any) => {
+            t0.current = Truck
+            onReady('Toyota is ready')
+        })
+
+        Toyota({ size: 50, x: 0, y: 0, z: 0 }).then((Truck: any) => {
             t0.current = Truck
             onReady('Toyota is ready')
         })

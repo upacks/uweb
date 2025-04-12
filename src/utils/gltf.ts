@@ -71,7 +71,7 @@ export const Dozer = (
 
     { size = 50, x = 0, y = 0, z = 0 }: { size: number, x: number, y: number, z: number }
 
-): Promise<iGLTF> => new Promise((res) => Loader.load('./dozer/scene.gltf', (gltf: any) => {
+): Promise<iGLTF> => new Promise((res) => Loader.load('./dozer.glb', (gltf: any) => {
 
     const scene = gltf.scene
     const scale = size / 250 // 0.2
