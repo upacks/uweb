@@ -1,7 +1,7 @@
 import { React, Render, Typography, Row, Col } from './react'
 import { ThreeView } from './three'
 import { MapView } from './maptalks'
-import { Vehicle, Toyota, Dozer, Drill } from './utils'
+import { Vehicle, Toyota, Dozer, Drill, Exca, Dump, Truck } from './utils'
 
 import { log, Loop, Delay } from 'utils/web'
 
@@ -29,18 +29,6 @@ const main = ({ isDarkMode }: any) => {
 
                 log.success(`Master is ready`)
 
-                new Vehicle({
-                    Truck: t0.current,
-                    Maptalks: v0.current,
-                    Three: v1.current,
-                })
-
-                new Vehicle({
-                    Truck: t0.current,
-                    Maptalks: v0.current,
-                    Three: v1.current,
-                })
-
             }
         }
 
@@ -65,15 +53,45 @@ const main = ({ isDarkMode }: any) => {
             antialias: false,
         })
 
-        Drill({ size: 50, x: 0, y: 0, z: 0 }).then((Truck: any) => {
-            t0.current = Truck
-            onReady('Toyota is ready')
-        })
+        setTimeout(() => {
 
-        Toyota({ size: 50, x: 0, y: 0, z: 0 }).then((Truck: any) => {
-            t0.current = Truck
-            onReady('Toyota is ready')
-        })
+            for (let i = 0; i <= 15; i++) {
+
+                Toyota({ size: 50, x: -60 + (i * 6), y: -30, z: 0 }).then((t: any) => {
+                    new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
+                })
+
+                Dump({ size: 50, x: -180 + (i * 22), y: 40, z: 0 }).then((t: any) => {
+                    new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
+                })
+
+            }
+
+            Toyota({ size: 50, x: -50, y: 0, z: 0 }).then((t: any) => {
+                new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
+            })
+
+            Dozer({ size: 50, x: -35, y: 0, z: 0 }).then((t: any) => {
+                new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
+            })
+
+            Drill({ size: 50, x: -20, y: 0, z: 0 }).then((t: any) => {
+                new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
+            })
+
+            Exca({ size: 50, x: -5, y: 0, z: 0 }).then((t: any) => {
+                new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
+            })
+
+            Truck({ size: 50, x: 10, y: 0, z: 0 }).then((t: any) => {
+                new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
+            })
+
+            Dump({ size: 50, x: 35, y: 0, z: 0 }).then((t: any) => {
+                new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
+            })
+
+        }, 500)
 
         v0.current.onReady(() => onReady('MapView is ready'))
         v1.current.onReady(() => onReady('ThreeView is ready'))

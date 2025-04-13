@@ -10,75 +10,146 @@ interface iGLTF {
     ThreePivot: THREE.Group
 }
 
-export const Drill = (
+export const Exca = (
 
-    /** Ignoring the config, since calculation is bit difficult **/
     { size = 50, x = 0, y = 0, z = 0 }: { size: number, x: number, y: number, z: number }
 
-): Promise<iGLTF> => new Promise((res) => {
+): Promise<iGLTF> => new Promise((res) => Loader.load('./exca-mini.glb', (gltf: any) => {
 
-    Loader.load('./drill/body/scene.gltf', (gltf: any) => compile(gltf.scene, null))
-    Loader.load('./drill/bit/scene.gltf', (gltf: any) => compile(null, gltf.scene))
+    const scene = gltf.scene
+    const scale = 0.5
+    const div = 45
 
-    let crane: any = null
-    let bit: any = null
+    scene.rotation.set(Math.PI / 2, -Math.PI / 2, 0)
+    scene.position.set(x + 8, y - 24, z)
 
-    const compile = (_crane: any, _bit: any) => {
+    const mapScene = SkeletonUtils.clone(scene)
+    const threeScene = SkeletonUtils.clone(scene)
 
-        if (_crane) { crane = _crane }
-        if (_bit) { bit = _bit }
-        if (crane && bit) {
+    const ThreePivot = new THREE.Group()
+    ThreePivot.add(threeScene)
+    ThreePivot.matrixWorldNeedsUpdate = true
+    ThreePivot.updateMatrixWorld(true)
+    ThreePivot.scale.set(scale, scale, scale)
 
-            const scale = 0.003
-            const sbit = 0.0025
-            const div = 45
+    const MapPivot = new THREE.Group()
+    MapPivot.add(mapScene)
+    MapPivot.matrixWorldNeedsUpdate = true
+    MapPivot.updateMatrixWorld(true)
+    MapPivot.scale.set(scale / div, scale / div, scale / div)
 
-            crane.rotation.set(Math.PI / 2, Math.PI, 0)
-            crane.position.set(0, -1800, 150)
+    res({ MapPivot, ThreePivot })
 
-            bit.rotation.set(Math.PI * 2, Math.PI / 2, 0)
-            bit.position.set(-1680, -80, -1350)
-            bit.scale.set(sbit, sbit, sbit)
+}))
 
-            const threeCrane = SkeletonUtils.clone(crane)
-            const threeBit = SkeletonUtils.clone(bit)
+export const Drill = (
 
-            const mapCrane = SkeletonUtils.clone(crane)
-            const mapBit = SkeletonUtils.clone(bit)
+    { size = 50, x = 0, y = 0, z = 0 }: { size: number, x: number, y: number, z: number }
 
-            const ThreePivot = new THREE.Group()
-            ThreePivot.add(threeCrane)
-            ThreePivot.add(threeBit)
-            ThreePivot.matrixWorldNeedsUpdate = true
-            ThreePivot.updateMatrixWorld(true)
-            ThreePivot.scale.set(scale, scale, scale)
+): Promise<iGLTF> => new Promise((res) => Loader.load('./drill-mini.glb', (gltf: any) => {
 
-            const MapPivot = new THREE.Group()
-            MapPivot.add(mapCrane)
-            MapPivot.add(mapBit)
-            MapPivot.matrixWorldNeedsUpdate = true
-            MapPivot.updateMatrixWorld(true)
-            MapPivot.scale.set(scale / div, scale / div, scale / div)
+    const scene = gltf.scene
+    const scale = 0.5
+    const div = 45
 
-            res({ MapPivot, ThreePivot })
-        }
+    scene.rotation.set(Math.PI / 2, -Math.PI / 2, 0)
+    scene.position.set(x + 21.15, y - 17.6, z)
 
-    }
+    const mapScene = SkeletonUtils.clone(scene)
+    const threeScene = SkeletonUtils.clone(scene)
 
-})
+    const ThreePivot = new THREE.Group()
+    ThreePivot.add(threeScene)
+    ThreePivot.matrixWorldNeedsUpdate = true
+    ThreePivot.updateMatrixWorld(true)
+    ThreePivot.scale.set(scale, scale, scale)
+
+    const MapPivot = new THREE.Group()
+    MapPivot.add(mapScene)
+    MapPivot.matrixWorldNeedsUpdate = true
+    MapPivot.updateMatrixWorld(true)
+    MapPivot.scale.set(scale / div, scale / div, scale / div)
+
+    res({ MapPivot, ThreePivot })
+
+}))
 
 export const Dozer = (
 
     { size = 50, x = 0, y = 0, z = 0 }: { size: number, x: number, y: number, z: number }
 
-): Promise<iGLTF> => new Promise((res) => Loader.load('./dozer.glb', (gltf: any) => {
+): Promise<iGLTF> => new Promise((res) => Loader.load('./dozer-mini.glb', (gltf: any) => {
 
     const scene = gltf.scene
-    const scale = size / 250 // 0.2
+    const scale = 0.5
     const div = 45
 
-    scene.rotation.set(Math.PI / 2, 0, 0)
-    scene.position.set(-1.25 + (x / 10), -13.25 - (y / 10), 1.25 + (z / 10))
+    scene.rotation.set(Math.PI / 2, Math.PI / 2, 0)
+    scene.position.set(x + 8.5, y + 40, z)
+
+    const mapScene = SkeletonUtils.clone(scene)
+    const threeScene = SkeletonUtils.clone(scene)
+
+    const ThreePivot = new THREE.Group()
+    ThreePivot.add(threeScene)
+    ThreePivot.matrixWorldNeedsUpdate = true
+    ThreePivot.updateMatrixWorld(true)
+    ThreePivot.scale.set(scale, scale, scale)
+
+    const MapPivot = new THREE.Group()
+    MapPivot.add(mapScene)
+    MapPivot.matrixWorldNeedsUpdate = true
+    MapPivot.updateMatrixWorld(true)
+    MapPivot.scale.set(scale / div, scale / div, scale / div)
+
+    res({ MapPivot, ThreePivot })
+
+}))
+
+export const Dump = (
+
+    { size = 50, x = 0, y = 0, z = 0 }: { size: number, x: number, y: number, z: number }
+
+): Promise<iGLTF> => new Promise((res) => Loader.load('./dump-mini.glb', (gltf: any) => {
+
+    const scene = gltf.scene
+    const scale = 0.4
+    const div = 45
+
+    scene.rotation.set(Math.PI / 2, Math.PI / 2, 0)
+    scene.position.set(x + 24.5, y + 40, z)
+
+    const mapScene = SkeletonUtils.clone(scene)
+    const threeScene = SkeletonUtils.clone(scene)
+
+    const ThreePivot = new THREE.Group()
+    ThreePivot.add(threeScene)
+    ThreePivot.matrixWorldNeedsUpdate = true
+    ThreePivot.updateMatrixWorld(true)
+    ThreePivot.scale.set(scale, scale, scale)
+
+    const MapPivot = new THREE.Group()
+    MapPivot.add(mapScene)
+    MapPivot.matrixWorldNeedsUpdate = true
+    MapPivot.updateMatrixWorld(true)
+    MapPivot.scale.set(scale / div, scale / div, scale / div)
+
+    res({ MapPivot, ThreePivot })
+
+}))
+
+export const Truck = (
+
+    { size = 50, x = 0, y = 0, z = 0 }: { size: number, x: number, y: number, z: number }
+
+): Promise<iGLTF> => new Promise((res) => Loader.load('./truck-mini.glb', (gltf: any) => {
+
+    const scene = gltf.scene
+    const scale = 0.4
+    const div = 45
+
+    scene.rotation.set(Math.PI / 2, Math.PI / 2, 0)
+    scene.position.set(x - 24.5, y + 40, z)
 
     const mapScene = SkeletonUtils.clone(scene)
     const threeScene = SkeletonUtils.clone(scene)
@@ -103,14 +174,14 @@ export const Toyota = (
 
     { size = 50, x = 0, y = 0, z = 0 }: { size: number, x: number, y: number, z: number }
 
-): Promise<iGLTF> => new Promise((res) => Loader.load('./hilux.glb', (gltf: any) => {
+): Promise<iGLTF> => new Promise((res) => Loader.load('./car-mini.glb', (gltf: any) => {
 
     const scene = gltf.scene
-    const scale = (size - 23) / 1000
+    const scale = 0.5
     const div = 45
 
-    scene.rotation.set(Math.PI / 2, -Math.PI / 2, 0)
-    scene.position.set(x, (-90) - y, z)
+    scene.rotation.set(Math.PI / 2, Math.PI / 2, 0)
+    scene.position.set(x - 4.75, y + 40, z)
 
     const mapScene = SkeletonUtils.clone(scene)
     const threeScene = SkeletonUtils.clone(scene)
