@@ -1,8 +1,7 @@
 import { React, Render, Typography, Row, Col } from './react'
 import { ThreeView } from './three'
 import { MapView } from './maptalks'
-import { Vehicle, Toyota, Dozer, Drill, Exca, Dump, Truck } from './utils'
-
+import { UTM, Vehicle, Toyota, Dozer, Drill, Exca, Dump, Truck } from './utils'
 import { log, Loop, Delay } from 'utils/web'
 
 const { useEffect, useRef } = React
@@ -37,8 +36,11 @@ const main = ({ isDarkMode }: any) => {
             simulate: true,
             isDarkMode,
             urlTemplate: `https://c.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png`,
-            lat: ll[0],
-            lon: ll[1],
+            // lat: ll[0],
+            // lon: ll[1],
+            lat: 0,
+            lon: 100.51125610283364,
+            zoom: 20,
             // fps: 10,
             // devicePixelRatio: 0.5,
         })
@@ -50,12 +52,13 @@ const main = ({ isDarkMode }: any) => {
             isDarkMode,
             // fps: 10,
             // devicePixelRatio: 0.2,
-            antialias: false,
+            antialias: true,
+            far: 50
         })
 
         setTimeout(() => {
 
-            for (let i = 0; i <= 15; i++) {
+            /* for (let i = 0; i <= 15; i++) {
 
                 Toyota({ size: 50, x: -60 + (i * 6), y: -30, z: 0 }).then((t: any) => {
                     new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
@@ -65,9 +68,9 @@ const main = ({ isDarkMode }: any) => {
                     new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
                 })
 
-            }
+            } */
 
-            Toyota({ size: 50, x: -50, y: 0, z: 0 }).then((t: any) => {
+            Toyota({ size: 1, x: 0, y: 0, z: 0 }).then((t: any) => {
                 new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
             })
 
@@ -75,19 +78,36 @@ const main = ({ isDarkMode }: any) => {
                 new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
             })
 
-            Drill({ size: 50, x: -20, y: 0, z: 0 }).then((t: any) => {
+            Drill({ size: 1, x: 0, y: 0, z: 0 }).then((t: any) => {
+
+                const drill2 = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
+
+                // setTimeout(() => drill2.animate(0, { loop: true }), 2500)
+                // setTimeout(() => drill2.animate(0, { reset: false, stop: true }), 5000)
+
+                const gen = (x = 0, y = 0, z = 0, h = 0): any => {
+
+                    const { lat, lng } = UTM.convertUtmToLatLng(x, y, "48", "T")
+                    return { gps: [lng, lat, z], utm: [x, y, z], head: h }
+
+                }
+
+                Delay(() => drill2.update(gen(0, 0, 0, 0)), 1000)
+                Delay(() => drill2.update(gen(10, 10, 0, 0.4)), 2500)
+                Delay(() => drill2.update(gen(10, 25, 0, 1)), 5000)
+
+            })
+
+            // Dump({ size: 50, x: 35, y: 0, z: 0 }).then((t: any) => {
+            Dump({ size: 50, x: -50, y: 0, z: 0 }).then((t: any) => {
                 new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
             })
 
-            Exca({ size: 50, x: -5, y: 0, z: 0 }).then((t: any) => {
+            Exca({ size: 50, x: 50, y: 0, z: 0 }).then((t: any) => {
                 new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
             })
 
-            Truck({ size: 50, x: 10, y: 0, z: 0 }).then((t: any) => {
-                new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
-            })
-
-            Dump({ size: 50, x: 35, y: 0, z: 0 }).then((t: any) => {
+            Truck({ size: 50, x: 60, y: 0, z: 0 }).then((t: any) => {
                 new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
             })
 

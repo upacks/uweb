@@ -8,6 +8,9 @@ import { distanceLatLon } from '../utils'
 import bearing from '@turf/bearing'
 import { point, Coord, Point } from '@turf/helpers'
 
+const { RoomEnvironment } = require('three/addons/environments/RoomEnvironment.js')
+const TWEEN = require('@tweenjs/tween.js')
+
 const { Map, TileLayer } = maptalks
 const { ThreeLayer } = maptalks_three
 
@@ -16,6 +19,9 @@ class MapView {
     map: maptalks.Map | any = {}
     scene: any
     camera: any
+    renderer: any = {}
+    clock = new THREE.Clock()
+    mixers: any = []
     threeLayer: maptalks_three.ThreeLayer = new ThreeLayer('threelayer', {
         identifyCountOnEvent: 1,
         forceRenderOnMoving: true,
@@ -73,6 +79,13 @@ class MapView {
                 this.scene.add(light)
                 this.scene.add(new THREE.AmbientLight('#fff', 0.5))
 
+                const renderer: any = this.threeLayer.getThreeRenderer()
+                const pmremGenerator = new THREE.PMREMGenerator(renderer)
+                pmremGenerator.compileEquirectangularShader()
+                const neutralEnvironment = pmremGenerator.fromScene(new RoomEnvironment()).texture
+                this.scene.environment = neutralEnvironment
+                // this.scene.background = neutralEnvironment
+
                 this.conf.readyCallback()
 
             }
@@ -81,7 +94,11 @@ class MapView {
 
             const update = () => {
 
-                setTimeout(() => requestAnimationFrame(update), 1000 / (this.conf.fps ?? 25))
+                // setTimeout(() => requestAnimationFrame(update), 1000 / (this.conf.fps ?? 25))
+                requestAnimationFrame(update)
+                const delta = this.clock.getDelta()
+                this.mixers.forEach((mixer: any) => mixer && mixer.update(delta))
+                TWEEN.update()
 
                 this.conf.updateCallback && this.conf.updateCallback()
                 this.threeLayer._needsUpdate && !this.threeLayer.isRendering() && this.threeLayer.redraw()

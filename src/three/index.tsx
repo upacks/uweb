@@ -4,6 +4,7 @@ import Stats from 'stats.js'
 const { OrbitControls } = require('three/addons/controls/OrbitControls.js')
 const { ViewHelper } = require('three/addons/helpers/ViewHelper.js')
 const { GLTFLoader } = require('three/addons/loaders/GLTFLoader.js')
+const { RoomEnvironment } = require('three/addons/environments/RoomEnvironment.js')
 
 import { Delay, Loop } from 'utils/web'
 import { Tick, distance3D, colorize } from '../utils'
@@ -12,9 +13,9 @@ class ThreeView {
 
     conf: any = {
         tick: new Tick(),
-        clock: new THREE.Clock(),
         stats: new Stats(),
         cbs: {},
+        far: 25,
         readyCallback: (...e: any) => { },
         updateCallback: (...e: any) => { },
     }
@@ -22,6 +23,8 @@ class ThreeView {
     scene = new THREE.Scene()
     renderer: any = {}
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 10000)
+    clock = new THREE.Clock()
+    mixers: any = []
     controls: any = {}
     raycaster: any = {}
     gltf = new GLTFLoader()
@@ -39,8 +42,8 @@ class ThreeView {
         const antialias = this.conf.hasOwnProperty('antialias') ? this.conf.antialias : true
 
         this.renderer = new THREE.WebGLRenderer({
-            antialias
-            // preserveDrawingBuffer: true,
+            antialias,
+            preserveDrawingBuffer: true,
         })
 
         if (this.conf.hasOwnProperty('devicePixelRatio')) {
@@ -73,7 +76,7 @@ class ThreeView {
         /** Setup Cameras **/
         this.camera.position.z = 1
         this.camera.up.fromArray([0, 0, 1])
-        this.camera.position.z = 25
+        this.camera.position.z = this.conf.far
 
         /** Setup Controllers **/
         this.controls = new OrbitControls(this.camera, this.renderer.domElement)
@@ -89,24 +92,31 @@ class ThreeView {
         this.scene.add(new THREE.HemisphereLight(0xffffbb, 0x080820, 0.5))
         this.setMode(this.conf.isDarkMode)
 
+        const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
+        pmremGenerator.compileEquirectangularShader();
+        const neutralEnvironment = pmremGenerator.fromScene(new RoomEnvironment()).texture;
+        this.scene.environment = neutralEnvironment
+        // this.scene.background = neutralEnvironment
+
         /** Add Canvas **/
         const container: any = document.getElementById(this.conf.containerId)
         this.conf.stats && container.appendChild(this.conf.stats.dom)
         container.appendChild(this.renderer.domElement)
-
         const { width, height } = container.getBoundingClientRect()
         this.renderer.setSize(width, height)
-
         this.camera.aspect = width / height
         this.camera.updateProjectionMatrix()
 
         const update = () => {
 
-            setTimeout(() => requestAnimationFrame(update), 1000 / (this.conf.fps ?? 25))
+            // setTimeout(() => requestAnimationFrame(update), 1000 / (this.conf.fps ?? 25))
+            requestAnimationFrame(update)
+            const delta = this.clock.getDelta()
+            this.mixers.forEach((mixer: any) => mixer && mixer.update(delta))
 
             this.conf.stats && this.conf.stats.begin()
 
-            if (this.viewHelper && this.viewHelper.animating) this.viewHelper.update(this.conf.clock.getDelta())
+            if (this.viewHelper && this.viewHelper.animating) this.viewHelper.update(delta)
             this.conf.updateCallback && this.conf.updateCallback()
             this.renderer.render(this.scene, this.camera)
             this.viewHelper && this.viewHelper.render(this.renderer)
@@ -118,6 +128,15 @@ class ThreeView {
         Delay(() => this.conf.readyCallback(), 0)
 
         update()
+
+        window.addEventListener('resize', () => {
+
+            const { width, height } = container.getBoundingClientRect()
+            this.renderer.setSize(width, height)
+            this.camera.aspect = width / height
+            this.camera.updateProjectionMatrix()
+
+        }, false)
 
     }
 
