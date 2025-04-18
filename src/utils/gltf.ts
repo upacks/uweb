@@ -90,11 +90,11 @@ export const Truck = ({ size = 1, x = 0, y = 0, z = 0 }: { size: number, x: numb
     }))
 
 export const Toyota = ({ size = 1, x = 0, y = 0, z = 0 }: { size: number, x: number, y: number, z: number }): Promise<iGLTF> =>
-    new Promise((res) => Loader.load('./car-mini.glb', (gltf: any) => {
+    new Promise((res) => Loader.load('./car.glb', (gltf: any) => {
 
-        const scale = 1.2
-        gltf.scene.rotation.set(Math.PI / 2, Math.PI, 0)
-        gltf.scene.position.set(x, y - 3.5, z)
+        const scale = 0.0075
+        gltf.scene.rotation.set(Math.PI / 2, Math.PI / 2, 0)
+        gltf.scene.position.set(x, y - 275, z)
         res(GenerateCommon(gltf, (size < 0 || size > 10) ? scale : (scale * size), 45))
 
     }))
@@ -216,18 +216,20 @@ export class Vehicle {
         try {
 
             const ups: any = []
-            const frame = setInterval(() => ups.forEach((tween: any) => tween && tween.update()), 1000 / this.fps)
+            const duration = this.fps > 0 ? 1000 : 0
+            const fps = this.fps > 0 ? 1000 / this.fps : 500
+            const frame = setInterval(() => ups.forEach((tween: any) => tween && tween.update()), fps)
 
             if (this.isM) {
 
                 const pos = { x: gps[0], y: gps[1], z: 0 }
                 const rot = { x: 0, y: 0, z: head }
 
-                ups[0] = new TWEEN.Tween(this.prev.map.pos).to(pos, 1000)
+                ups[0] = new TWEEN.Tween(this.prev.map.pos).to(pos, duration)
                     .onComplete(() => clearInterval(frame))
                     .onUpdate((_pos: any) => this.TruckMap.getObject3d().position.copy(this.Maptalks.threeLayer.coordinateToVector3(_pos, 0))).start()
 
-                ups[1] = new TWEEN.Tween(this.prev.map.rot).to(rot, 1000)
+                ups[1] = new TWEEN.Tween(this.prev.map.rot).to(rot, duration)
                     .onComplete(() => clearInterval(frame))
                     .onUpdate((_rot: any) => this.TruckMap.getObject3d().rotation.fromArray([_rot.x, _rot.y, _rot.z])).start()
 
@@ -241,11 +243,11 @@ export class Vehicle {
                 const pos = { x: utm[0], y: utm[1], z: utm[2] }
                 const rot = { x: 0, y: 0, z: head }
 
-                ups[2] = new TWEEN.Tween(this.prev.three.pos).to(pos, 1000)
+                ups[2] = new TWEEN.Tween(this.prev.three.pos).to(pos, duration)
                     .onComplete(() => clearInterval(frame))
                     .onUpdate((_pos: any) => this.TruckThree.position.fromArray([_pos.x, _pos.y, _pos.z])).start()
 
-                ups[3] = new TWEEN.Tween(this.prev.three.rot).to(rot, 1000)
+                ups[3] = new TWEEN.Tween(this.prev.three.rot).to(rot, duration)
                     .onComplete(() => clearInterval(frame))
                     .onUpdate((_rot: any) => this.TruckThree.rotation.fromArray([_rot.x, _rot.y, _rot.z])).start()
 

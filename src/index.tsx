@@ -80,7 +80,7 @@ const main = ({ isDarkMode }: any) => {
 
             Drill({ size: 1, x: 0, y: 0, z: 0 }).then((t: any) => {
 
-                const drill2 = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
+                const drill2 = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current, fps: 0 })
 
                 // setTimeout(() => drill2.animate(0, { loop: true }), 2500)
                 // setTimeout(() => drill2.animate(0, { reset: false, stop: true }), 5000)
