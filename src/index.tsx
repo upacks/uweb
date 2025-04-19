@@ -31,11 +31,17 @@ const main = ({ isDarkMode }: any) => {
             }
         }
 
+        const types = {
+            'topo': 'https://api.maptiler.com/maps/topo-v2/{z}/{x}/{y}.png?key=l4hWJmvvmISSL7tpiPUZ',
+            'satellite': 'https://api.maptiler.com/maps/satellite/256/{z}/{x}/{y}.jpg?key=l4hWJmvvmISSL7tpiPUZ',
+            'openstreet': 'https://api.maptiler.com/maps/openstreetmap/{z}/{x}/{y}.jpg?key=l4hWJmvvmISSL7tpiPUZ',
+        }
+
         v0.current = new MapView({
             containerId: 'render_0',
             simulate: true,
             isDarkMode,
-            urlTemplate: `https://c.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png`,
+            urlTemplate: types.satellite,
             // lat: ll[0],
             // lon: ll[1],
             lat: 0,
@@ -80,7 +86,7 @@ const main = ({ isDarkMode }: any) => {
 
             Drill({ size: 1, x: 0, y: 0, z: 0 }).then((t: any) => {
 
-                const drill2 = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current, fps: 0 })
+                const drill2 = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current, fps: 60})
 
                 // setTimeout(() => drill2.animate(0, { loop: true }), 2500)
                 // setTimeout(() => drill2.animate(0, { reset: false, stop: true }), 5000)

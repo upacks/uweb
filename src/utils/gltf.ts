@@ -17,16 +17,29 @@ const GenerateCommon = (gltf: any, scale: number, div: number) => {
 
     const scene = gltf.scene
 
+    /* gltf.scene.traverse((child: any) => {
+
+        if (child.isMesh) {
+
+            child.castShadow = true
+            child.receiveShadow = true
+
+        }
+
+    }) */
+
     const mapScene = SkeletonUtils.clone(scene)
     const threeScene = SkeletonUtils.clone(scene)
 
     const ThreePivot = new THREE.Group()
+    ThreePivot.position.set(0, 0, 0)
     ThreePivot.add(threeScene)
     ThreePivot.matrixWorldNeedsUpdate = true
     ThreePivot.updateMatrixWorld(true)
     ThreePivot.scale.set(scale, scale, scale)
 
     const MapPivot = new THREE.Group()
+    MapPivot.position.set(0, 0, 0)
     MapPivot.add(mapScene)
     MapPivot.matrixWorldNeedsUpdate = true
     MapPivot.updateMatrixWorld(true)
@@ -135,16 +148,13 @@ export class Vehicle {
 
             this.isM = true
 
-            this.TruckMap = Maptalks.threeLayer.toModel(Truck.MapPivot)
+            this.TruckMap = Maptalks.threeLayer.toModel(Truck.MapPivot, {
+                coordinate: Maptalks.map.getCenter(),
+            })
             this.Maptalks.threeLayer.addMesh(this.TruckMap)
 
-            this.TruckMap.on("click", () => {
-                this.callback('mouse', 'click')
-            })
-
-            this.TruckMap.on("dblclick", () => {
-                this.callback('mouse', 'dblclick')
-            })
+            this.TruckMap.on("click", () => this.callback('mouse', 'click'))
+            this.TruckMap.on("dblclick", () => this.callback('mouse', 'dblclick'))
 
             this.TruckMap.on("mouseenter", () => {
                 this.changeCursor(this.canvas, 'pointer')
@@ -172,6 +182,8 @@ export class Vehicle {
             this.mixer && this.mixer.Three && this.Three.mixers.push(this.mixer.Three)
 
         }
+
+        // this.update({ gps: [0, 0, 0], utm: [0, 0, 0], head: 0 })
 
     }
 
@@ -218,20 +230,27 @@ export class Vehicle {
             const ups: any = []
             const duration = this.fps > 0 ? 1000 : 0
             const fps = this.fps > 0 ? 1000 / this.fps : 500
-            const frame = setInterval(() => ups.forEach((tween: any) => tween && tween.update()), fps)
+            const frame: any = this.fps > 0 ? setInterval(() => ups.forEach((tween: any) => tween && tween.update()), fps) : null
 
             if (this.isM) {
 
                 const pos = { x: gps[0], y: gps[1], z: 0 }
                 const rot = { x: 0, y: 0, z: head }
 
-                ups[0] = new TWEEN.Tween(this.prev.map.pos).to(pos, duration)
-                    .onComplete(() => clearInterval(frame))
-                    .onUpdate((_pos: any) => this.TruckMap.getObject3d().position.copy(this.Maptalks.threeLayer.coordinateToVector3(_pos, 0))).start()
+                if (this.fps > 0) {
 
-                ups[1] = new TWEEN.Tween(this.prev.map.rot).to(rot, duration)
-                    .onComplete(() => clearInterval(frame))
-                    .onUpdate((_rot: any) => this.TruckMap.getObject3d().rotation.fromArray([_rot.x, _rot.y, _rot.z])).start()
+                    ups[0] = new TWEEN.Tween(this.prev.map.pos).to(pos, duration)
+                        .onComplete(() => clearInterval(frame))
+                        .onUpdate((_pos: any) => this.TruckMap.getObject3d().position.copy(this.Maptalks.threeLayer.coordinateToVector3(_pos, 0))).start()
+
+                    ups[1] = new TWEEN.Tween(this.prev.map.rot).to(rot, duration)
+                        .onComplete(() => clearInterval(frame))
+                        .onUpdate((_rot: any) => this.TruckMap.getObject3d().rotation.fromArray([_rot.x, _rot.y, _rot.z])).start()
+
+                } else {
+                    this.TruckMap.getObject3d().position.copy(this.Maptalks.threeLayer.coordinateToVector3(pos, 0))
+                    this.TruckMap.getObject3d().rotation.fromArray([rot.x, rot.y, rot.z])
+                }
 
                 this.prev.map.pos = pos
                 this.prev.map.rot = rot
@@ -243,13 +262,20 @@ export class Vehicle {
                 const pos = { x: utm[0], y: utm[1], z: utm[2] }
                 const rot = { x: 0, y: 0, z: head }
 
-                ups[2] = new TWEEN.Tween(this.prev.three.pos).to(pos, duration)
-                    .onComplete(() => clearInterval(frame))
-                    .onUpdate((_pos: any) => this.TruckThree.position.fromArray([_pos.x, _pos.y, _pos.z])).start()
+                if (this.fps > 0) {
 
-                ups[3] = new TWEEN.Tween(this.prev.three.rot).to(rot, duration)
-                    .onComplete(() => clearInterval(frame))
-                    .onUpdate((_rot: any) => this.TruckThree.rotation.fromArray([_rot.x, _rot.y, _rot.z])).start()
+                    ups[2] = new TWEEN.Tween(this.prev.three.pos).to(pos, duration)
+                        .onComplete(() => clearInterval(frame))
+                        .onUpdate((_pos: any) => this.TruckThree.position.fromArray([_pos.x, _pos.y, _pos.z])).start()
+
+                    ups[3] = new TWEEN.Tween(this.prev.three.rot).to(rot, duration)
+                        .onComplete(() => clearInterval(frame))
+                        .onUpdate((_rot: any) => this.TruckThree.rotation.fromArray([_rot.x, _rot.y, _rot.z])).start()
+
+                } else {
+                    this.TruckThree.position.fromArray([pos.x, pos.y, pos.z])
+                    this.TruckThree.rotation.fromArray([rot.x, rot.y, rot.z])
+                }
 
                 this.prev.three.pos = pos
                 this.prev.three.rot = rot
