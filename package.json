@@ -1,0 +1,73 @@
+{
+    "name": "uweb",
+    "version": "0.0.57",
+    "repository": "git@github.com:upacks/uweb.git",
+    "author": "gantulga.khuyag@gmail.com",
+    "license": "MIT",
+    "type": "commonjs",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "ts-module": "./dist/index.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/react/index.d.ts",
+            "import": "./dist/react/index.jsx",
+            "require": "./dist/react/index.jsx",
+            "ts-import": "./src/react/index.tsx"
+        },
+        "./three": {
+            "types": "./dist/three/index.d.ts",
+            "import": "./dist/three/index.jsx",
+            "require": "./dist/three/index.jsx",
+            "ts-import": "./src/three/index.tsx"
+        },
+        "./maptalks": {
+            "types": "./dist/maptalks/index.d.ts",
+            "import": "./dist/maptalks/index.jsx",
+            "require": "./dist/maptalks/index.jsx",
+            "ts-import": "./src/maptalks/index.tsx"
+        },
+        "./comps": {
+            "types": "./dist/comps/index.d.ts",
+            "import": "./dist/comps/index.js",
+            "require": "./dist/comps/index.js",
+            "ts-import": "./src/comps/index.ts"
+        },
+        "./utils": {
+            "types": "./dist/utils/index.d.ts",
+            "import": "./dist/utils/index.js",
+            "require": "./dist/utils/index.js",
+            "ts-import": "./src/utils/index.ts"
+        }
+    },
+    "scripts": {
+        "start": "ubin watch_app",
+        "build": "ubin build_app --bundle --port 3009",
+        "serve": "node ./dist/run.js",
+        "release": "yarn version --patch && git add . && git push",
+        "_build": "tsc -p tsconfig.json"
+    },
+    "dependencies": {
+        "@ant-design/icons": "^5.2.5",
+        "@turf/bearing": "^6.5.0",
+        "@turf/helpers": "^6.5.0",
+        "@tweenjs/tween.js": "^25.0.0",
+        "antd": "^5.8.4",
+        "maptalks": "^1.0.0-rc.25",
+        "maptalks.three": "^0.37.2",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "stats.js": "^0.17.0",
+        "three": "^0.155.0",
+        "ubin": "upacks/ubin#1.0.5",
+        "utils": "upacks/utils#1.1.3"
+    },
+    "devDependencies": {
+        "@types/maptalks": "^0.49.3",
+        "@types/node": "^18.11.18",
+        "@types/react": "^18.2.20",
+        "@types/react-dom": "^18.2.7",
+        "@types/three": "^0.155.1",
+        "typescript": "^4.5.2"
+    }
+}
