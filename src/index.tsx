@@ -1,7 +1,7 @@
 import { React, Render, Typography, Row, Col } from './react'
 import { ThreeView } from './three'
 import { MapView } from './maptalks'
-import { UTM, Vehicle, Toyota, Dozer, Drill, Exca, Dump, Truck } from './utils'
+import { LoadRequiredFiles, UTM, Vehicle, Toyota, Dozer, Drill, Exca, Dump, Truck } from './utils'
 import { log, Loop, Delay } from 'utils/web'
 
 const { useEffect, useRef } = React
@@ -9,6 +9,7 @@ const { useEffect, useRef } = React
 const { Title } = Typography
 
 const ll = [43.67338010130343, 105.49508346330428, 0]
+console.log(UTM.convertLatLngToUtm(0, 100.51125610283364, 2))
 
 const main = ({ isDarkMode }: any) => {
 
@@ -46,8 +47,8 @@ const main = ({ isDarkMode }: any) => {
             // lon: ll[1],
             lat: 0,
             lon: 100.51125610283364,
-            zoom: 20,
-            // fps: 10,
+            zoom: 19,
+            fps: 10,
             // devicePixelRatio: 0.5,
         })
 
@@ -56,68 +57,89 @@ const main = ({ isDarkMode }: any) => {
             simulate: true,
             stats: false,
             isDarkMode,
-            // fps: 10,
+            fps: 10,
             // devicePixelRatio: 0.2,
             antialias: true,
             far: 50
         })
 
-        setTimeout(() => {
+        LoadRequiredFiles((files: any) => {
 
-            /* for (let i = 0; i <= 15; i++) {
-
-                Toyota({ size: 50, x: -60 + (i * 6), y: -30, z: 0 }).then((t: any) => {
-                    new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
-                })
-
-                Dump({ size: 50, x: -180 + (i * 22), y: 40, z: 0 }).then((t: any) => {
-                    new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
-                })
-
-            } */
-
-            Toyota({ size: 1, x: 0, y: 0, z: 0 }).then((t: any) => {
-                new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
-            })
-
-            Dozer({ size: 50, x: -35, y: 0, z: 0 }).then((t: any) => {
-                new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
-            })
-
-            Drill({ size: 1, x: 0, y: 0, z: 0 }).then((t: any) => {
-
-                const drill2 = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current, fps: 60})
-
-                // setTimeout(() => drill2.animate(0, { loop: true }), 2500)
-                // setTimeout(() => drill2.animate(0, { reset: false, stop: true }), 5000)
+            setTimeout(() => {
 
                 const gen = (x = 0, y = 0, z = 0, h = 0): any => {
 
-                    const { lat, lng } = UTM.convertUtmToLatLng(x, y, "48", "T")
+                    const { lat, lng } = UTM.convertUtmToLatLng(x, y, "48", "N")
                     return { gps: [lng, lat, z], utm: [x, y, z], head: h }
 
                 }
 
-                Delay(() => drill2.update(gen(0, 0, 0, 0)), 1000)
-                Delay(() => drill2.update(gen(10, 10, 0, 0.4)), 2500)
-                Delay(() => drill2.update(gen(10, 25, 0, 1)), 5000)
+                for (let i = 1; i <= 10; i++) {
 
-            })
+                    const posx = -80
+                    const anim = true
 
-            // Dump({ size: 50, x: 35, y: 0, z: 0 }).then((t: any) => {
-            Dump({ size: 50, x: -50, y: 0, z: 0 }).then((t: any) => {
-                new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
-            })
+                    Toyota({}).then((t: any) => {
 
-            Exca({ size: 50, x: 50, y: 0, z: 0 }).then((t: any) => {
-                new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
-            })
+                        const v = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current, fps: 2 })
+                        Delay(() => v.update(gen(posx + (i * 30), 0, 0, 0)), 250 * i)
+                        Delay(() => v.update(gen(posx + (i * 40), 0, 0, 0)), 500 * i + (i * 500))
+                        anim && setTimeout(() => v.animate("Take 001", { loop: true, speed: 0.5 }), 2500)
 
-            Truck({ size: 50, x: 60, y: 0, z: 0 }).then((t: any) => {
-                new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
-            })
+                        i === 5 && setTimeout(() => {
 
-        }, 500)
+                            v.on((...e: any) => {
+                                // console.log(e)
+                            })
+
+                            setTimeout(() => {
+
+                                setTimeout(() => v.setColor('#FF0000'), 2000) // Red
+                                setTimeout(() => v.setColor('#00FF00'), 4000) // Green
+
+                                anim && setTimeout(() => v.animate("Take 001", { loop: true, speed: 0.5, stop: true }), 2500)
+
+                            }, 7500)
+
+                        }, 2500)
+
+                    })
+
+                    Dozer({}).then((t: any) => {
+                        const v = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current, fps: 10 })
+                        Delay(() => v.update(gen(posx + (i * 30), 30, 0, 0)), 250 * i)
+                        anim && setTimeout(() => v.animate("Take 001", { loop: true, speed: 0.5 }), 2500)
+                    })
+
+                    Drill({}).then((t: any) => {
+                        const v = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
+                        Delay(() => v.update(gen(posx + (i * 30), 60, 0, 0)), 250 * i)
+                        anim && setTimeout(() => v.animate("Take 001", { loop: true, speed: 0.5 }), 2500)
+                    })
+
+                    Dump({}).then((t: any) => {
+                        const v = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
+                        Delay(() => v.update(gen(posx + (i * 30), 90, 0, 0)), 250 * i)
+                        anim && setTimeout(() => v.animate("Take 001", { loop: true, speed: 0.5 }), 2500)
+                    })
+
+                    Exca({}).then((t: any) => {
+                        const v = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
+                        Delay(() => v.update(gen(posx + (i * 30), 130, 0, 0)), 250 * i)
+                        anim && setTimeout(() => v.animate("Take 001", { loop: true, speed: 0.5 }), 2500)
+                    })
+
+                    Truck({}).then((t: any) => {
+                        const v = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
+                        Delay(() => v.update(gen(posx + (i * 30), 150, 0, 0)), 250 * i)
+                        anim && setTimeout(() => v.animate("Take 001", { loop: true, speed: 0.5 }), 2500)
+                    })
+
+                }
+
+            }, 1000)
+
+        })
 
         v0.current.onReady(() => onReady('MapView is ready'))
         v1.current.onReady(() => onReady('ThreeView is ready'))
@@ -132,8 +154,8 @@ const main = ({ isDarkMode }: any) => {
     }, [isDarkMode])
 
     return <Row id="main" style={{ height: '100%' }}>
-        <Col id='render_0' span={12} style={{ height: '100%' }} />
-        <Col id='render_1' span={12} style={{ height: '100%' }} />
+        <Col id='render_0' span={24} style={{ height: '100%' }} />
+        {/* <Col id='render_1' span={24} style={{ height: '50%' }} /> */}
     </Row>
 
 }
