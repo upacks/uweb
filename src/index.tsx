@@ -88,8 +88,8 @@ const main = ({ isDarkMode }: any) => {
 
                         i === 5 && setTimeout(() => {
 
-                            v.on((...e: any) => {
-                                // console.log(e)
+                            v.on((state: any, args) => {
+                                console.log(args.gps)
                             })
 
                             setTimeout(() => {

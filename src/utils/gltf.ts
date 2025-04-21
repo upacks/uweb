@@ -291,14 +291,10 @@ export class Vehicle {
         try {
 
             const ups: any = []
-            const live: any = []
             const duration = this.fps > 0 ? 2500 : 0
             const fps = this.fps > 0 ? 1000 / this.fps : 500
             const frame: any = this.fps > 0 ? setInterval(() => {
-
-                this.callback('position-map', { gps: live[0], head: live[1] })
                 ups.forEach((tween: any) => tween && tween.update())
-
             }, fps) : null
 
             if (this.isM) {
@@ -311,20 +307,23 @@ export class Vehicle {
                     ups[0] = new TWEEN.Tween(this.prev.map.pos).to(pos, duration)
                         .onComplete(() => clearInterval(frame))
                         .onUpdate((_pos: any) => {
-                            live[0] = _pos
+
+                            this.callback('position-map', { gps: _pos })
                             this.TruckMap.getObject3d().position.copy(this.Maptalks.threeLayer.coordinateToVector3(_pos, 0))
+
                         }).start()
 
                     ups[1] = new TWEEN.Tween(this.prev.map.rot).to(rot, duration)
                         .onComplete(() => clearInterval(frame))
                         .onUpdate((_rot: any) => {
-                            live[1] = _rot
+
                             this.TruckMap.getObject3d().rotation.fromArray([_rot.x, _rot.y, _rot.z])
+
                         }).start()
 
                 } else {
 
-                    this.callback('position-map', { gps: pos, head: rot })
+                    this.callback('position-map', { gps: pos })
                     this.TruckMap.getObject3d().position.copy(this.Maptalks.threeLayer.coordinateToVector3(pos, 0))
                     this.TruckMap.getObject3d().rotation.fromArray([rot.x, rot.y, rot.z])
 
