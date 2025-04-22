@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { log } from 'utils/web'
+import { Loop, log } from 'utils/web'
 
 const { GLTFLoader } = require('three/addons/loaders/GLTFLoader.js')
 const { FBXLoader } = require('three/addons/loaders/FBXLoader.js')
@@ -164,9 +164,13 @@ export class Vehicle {
     clips: any
     fps = 30
     frame: any = null
+    buffer: boolean = false /** Buffer the moves, for smooth transitioning **/
+
     prev: any = {
         map: { pos: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } },
         three: { pos: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } },
+        moves: [],
+        free: true,
         update: 0
     }
 
@@ -175,7 +179,7 @@ export class Vehicle {
     canvas: any = document.getElementsByClassName('maptalks-canvas-layer')
     changeCursor = (coll: any, value: string) => { for (var i = 0, len = coll.length; i < len; i++) coll[i].style["cursor"] = value }
 
-    constructor({ Truck, Maptalks, Three, fps = 60 }: any) {
+    constructor({ Truck, Maptalks, Three, fps = 60, buffer = true }: any) {
 
         this.Truck = Truck ?? null
 
@@ -185,6 +189,7 @@ export class Vehicle {
         this.mixer = Truck.Mixer ?? {}
         this.clips = Truck.Clips ?? null
         this.fps = fps
+        this.buffer = buffer
 
         if (this.Maptalks) {
 
@@ -224,6 +229,16 @@ export class Vehicle {
             this.mixer && this.mixer.Three && this.Three.mixers.push(this.mixer.Three)
 
         }
+
+
+        this.buffer && Loop(() => {
+
+            if (this.prev.free && this.prev.moves.length > 0) {
+                clearInterval(this.frame)
+                this.update_exec(this.prev.moves.shift())
+            }
+
+        }, 100)
 
     }
 
@@ -292,8 +307,17 @@ export class Vehicle {
         const now = Date.now()
         const dur = (now - pre) > 5000 ? 0 : now - pre
         this.prev.update = now
-        clearInterval(this.frame)
-        this.update_exec({ gps, utm, head, dur })
+
+        if (this.buffer) {
+
+            this.prev.moves.push({ gps, utm, head, dur })
+
+        } else {
+
+            clearInterval(this.frame)
+            this.update_exec({ gps, utm, head, dur })
+
+        }
 
     }
 
@@ -301,12 +325,12 @@ export class Vehicle {
 
         try {
 
+            this.prev.free = false
             const ups: any = []
             const duration = this.fps > 0 ? dur : 0
             const fps = dur === 0 ? 0 : this.fps > 0 ? 1000 / this.fps : 500
-            this.frame = fps > 0 ? setInterval(() => {
-                ups.forEach((tween: any) => tween && tween.update())
-            }, fps) : null
+            this.frame = fps > 0 ? setInterval(() => { ups.forEach((tween: any) => tween && tween.update()) }, fps) : null
+            const clear = () => { clearInterval(this.frame); this.prev.free = true; }
 
             const head_pre = this.prev.map.rot.z
             const head_dir = head_pre < head // 1 -> 5 ? true || 5 -> 1 ? false
@@ -322,16 +346,17 @@ export class Vehicle {
                 if (fps > 0) {
 
                     ups[0] = new TWEEN.Tween(this.prev.map.pos).to(pos, duration)
-                        .onComplete(() => clearInterval(this.frame))
+                        .onComplete(() => clear())
                         .onUpdate((_pos: any) => {
 
                             this.callback('position-map', { gps: _pos })
                             this.TruckMap.getObject3d().position.copy(this.Maptalks.threeLayer.coordinateToVector3(_pos, 0))
+                            this.prev.free = true
 
                         }).start()
 
                     ups[1] = new TWEEN.Tween(this.prev.map.rot).to(rot, duration)
-                        .onComplete(() => clearInterval(this.frame))
+                        .onComplete(() => clear())
                         .onUpdate((_rot: any) => {
 
                             this.TruckMap.getObject3d().rotation.fromArray([_rot.x, _rot.y, _rot.z])
@@ -343,6 +368,7 @@ export class Vehicle {
                     this.callback('position-map', { gps: pos })
                     this.TruckMap.getObject3d().position.copy(this.Maptalks.threeLayer.coordinateToVector3(pos, 0))
                     this.TruckMap.getObject3d().rotation.fromArray([rot.x, rot.y, rot.z])
+                    this.prev.free = true
 
                 }
 
@@ -359,16 +385,19 @@ export class Vehicle {
                 if (fps > 0) {
 
                     ups[2] = new TWEEN.Tween(this.prev.three.pos).to(pos, duration)
-                        .onComplete(() => clearInterval(this.frame))
+                        .onComplete(() => clear())
                         .onUpdate((_pos: any) => this.TruckThree.position.fromArray([_pos.x, _pos.y, _pos.z])).start()
 
                     ups[3] = new TWEEN.Tween(this.prev.three.rot).to(rot, duration)
-                        .onComplete(() => clearInterval(this.frame))
+                        .onComplete(() => clear())
                         .onUpdate((_rot: any) => this.TruckThree.rotation.fromArray([_rot.x, _rot.y, _rot.z])).start()
 
                 } else {
+
                     this.TruckThree.position.fromArray([pos.x, pos.y, pos.z])
                     this.TruckThree.rotation.fromArray([rot.x, rot.y, rot.z])
+                    this.prev.free = true
+
                 }
 
                 this.prev.three.pos = pos

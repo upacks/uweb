@@ -81,7 +81,7 @@ const main = ({ isDarkMode }: any) => {
 
                     Toyota({}).then((t: any) => {
 
-                        const v = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current, fps: 10 })
+                        const v = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current, fps: 60})
 
                         // Delay(() => v.update(gen(posx + (i * 30), 0, 0, 1)), 250 * i)
                         // Delay(() => v.update(gen(posx + (i * 40), 0, 0, 10 / i)), 500 * i + (i * 500))
@@ -99,7 +99,7 @@ const main = ({ isDarkMode }: any) => {
                                 v.update(gen(posx + (i * 30), 0, 0, cases[++pi % len]))
                                 // v.update(gen(posx + (i * 30), 0, 0, Math.PI * pi++))
 
-                            }, 2500)
+                            }, 500)
 
                             return null
                             v.on((state: any, args) => {
