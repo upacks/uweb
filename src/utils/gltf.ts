@@ -163,9 +163,11 @@ export class Vehicle {
     mixer: any
     clips: any
     fps = 30
+    frame: any = null
     prev: any = {
         map: { pos: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } },
         three: { pos: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } },
+        update: 0
     }
 
     callback: any = (...n: any) => { }
@@ -222,8 +224,6 @@ export class Vehicle {
             this.mixer && this.mixer.Three && this.Three.mixers.push(this.mixer.Three)
 
         }
-
-        // this.update({ gps: [0, 0, 0], utm: [0, 0, 0], head: 0 })
 
     }
 
@@ -288,24 +288,41 @@ export class Vehicle {
 
     update = ({ gps = [0, 0, 0], utm = [0, 0, 0], head = 0 }: { gps: [number, number, number], utm: [number, number, number], head: number }) => {
 
+        const pre = this.prev.update
+        const now = Date.now()
+        const dur = (now - pre) > 5000 ? 0 : now - pre
+        this.prev.update = now
+        clearInterval(this.frame)
+        this.update_exec({ gps, utm, head, dur })
+
+    }
+
+    update_exec = ({ gps = [0, 0, 0], utm = [0, 0, 0], head = 0, dur = 0 }: { gps: [number, number, number], utm: [number, number, number], head: number, dur: number }) => {
+
         try {
 
             const ups: any = []
-            const duration = this.fps > 0 ? 2500 : 0
-            const fps = this.fps > 0 ? 1000 / this.fps : 500
-            const frame: any = this.fps > 0 ? setInterval(() => {
+            const duration = this.fps > 0 ? dur : 0
+            const fps = dur === 0 ? 0 : this.fps > 0 ? 1000 / this.fps : 500
+            this.frame = fps > 0 ? setInterval(() => {
                 ups.forEach((tween: any) => tween && tween.update())
             }, fps) : null
+
+            const head_pre = this.prev.map.rot.z
+            const head_dir = head_pre < head // 1 -> 5 ? true || 5 -> 1 ? false
+            const head_abs = head_dir ? head - head_pre : head_pre - head // 4 || 4
+            const head_gen = head_dir ? head - (Math.PI * 2) : (Math.PI * 2) + head
+            const head_exc = head_abs > Math.PI // true || true
 
             if (this.isM) {
 
                 const pos = { x: gps[0], y: gps[1], z: 0 }
-                const rot = { x: 0, y: 0, z: head }
+                const rot = { x: 0, y: 0, z: head_exc ? head_gen : head }
 
-                if (this.fps > 0) {
+                if (fps > 0) {
 
                     ups[0] = new TWEEN.Tween(this.prev.map.pos).to(pos, duration)
-                        .onComplete(() => clearInterval(frame))
+                        .onComplete(() => clearInterval(this.frame))
                         .onUpdate((_pos: any) => {
 
                             this.callback('position-map', { gps: _pos })
@@ -314,7 +331,7 @@ export class Vehicle {
                         }).start()
 
                     ups[1] = new TWEEN.Tween(this.prev.map.rot).to(rot, duration)
-                        .onComplete(() => clearInterval(frame))
+                        .onComplete(() => clearInterval(this.frame))
                         .onUpdate((_rot: any) => {
 
                             this.TruckMap.getObject3d().rotation.fromArray([_rot.x, _rot.y, _rot.z])
@@ -337,16 +354,16 @@ export class Vehicle {
             if (this.isT) {
 
                 const pos = { x: utm[0], y: utm[1], z: utm[2] }
-                const rot = { x: 0, y: 0, z: head }
+                const rot = { x: 0, y: 0, z: head_exc ? head_gen : head }
 
-                if (this.fps > 0) {
+                if (fps > 0) {
 
                     ups[2] = new TWEEN.Tween(this.prev.three.pos).to(pos, duration)
-                        .onComplete(() => clearInterval(frame))
+                        .onComplete(() => clearInterval(this.frame))
                         .onUpdate((_pos: any) => this.TruckThree.position.fromArray([_pos.x, _pos.y, _pos.z])).start()
 
                     ups[3] = new TWEEN.Tween(this.prev.three.rot).to(rot, duration)
-                        .onComplete(() => clearInterval(frame))
+                        .onComplete(() => clearInterval(this.frame))
                         .onUpdate((_rot: any) => this.TruckThree.rotation.fromArray([_rot.x, _rot.y, _rot.z])).start()
 
                 } else {

@@ -81,13 +81,27 @@ const main = ({ isDarkMode }: any) => {
 
                     Toyota({}).then((t: any) => {
 
-                        const v = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current, fps: 2 })
-                        Delay(() => v.update(gen(posx + (i * 30), 0, 0, 0)), 250 * i)
-                        Delay(() => v.update(gen(posx + (i * 40), 0, 0, 0)), 500 * i + (i * 500))
+                        const v = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current, fps: 10 })
+
+                        // Delay(() => v.update(gen(posx + (i * 30), 0, 0, 1)), 250 * i)
+                        // Delay(() => v.update(gen(posx + (i * 40), 0, 0, 10 / i)), 500 * i + (i * 500))
                         anim && setTimeout(() => v.animate("Take 001", { loop: true, speed: 0.5 }), 2500)
+                        v.update(gen(posx + (i * 30), 0, 0, 0))
 
                         i === 5 && setTimeout(() => {
 
+                            let pi = 0
+                            let cases = [0, 1, 2, 3, 1, 5, 1, 0]
+                            let len = cases.length
+
+                            Loop(() => {
+
+                                v.update(gen(posx + (i * 30), 0, 0, cases[++pi % len]))
+                                // v.update(gen(posx + (i * 30), 0, 0, Math.PI * pi++))
+
+                            }, 2500)
+
+                            return null
                             v.on((state: any, args) => {
                                 console.log(args.gps)
                             })
