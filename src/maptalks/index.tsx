@@ -6,7 +6,7 @@ import { log, Doc, KeyValue, Delay, Loop, Safe, Sfy } from 'utils/web'
 import { distanceLatLon } from '../utils'
 
 import bearing from '@turf/bearing'
-import { point, Coord, Point } from '@turf/helpers'
+import { point, Coord } from '@turf/helpers'
 
 const { RoomEnvironment } = require('three/addons/environments/RoomEnvironment.js')
 const TWEEN = require('@tweenjs/tween.js')

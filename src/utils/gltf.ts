@@ -8,6 +8,8 @@ const SkeletonUtils = require('three/addons/utils/SkeletonUtils.js')
 const TWEEN = require('@tweenjs/tween.js')
 const Loader = new GLTFLoader()
 
+const { Tween, Easing } = TWEEN
+
 interface iGLTF {
     MapPivot: THREE.Group
     ThreePivot: THREE.Group
@@ -310,6 +312,7 @@ export class Vehicle {
 
         if (this.buffer) {
 
+            /** should also save previous value to avoid glitch **/
             this.prev.moves.push({ gps, utm, head, dur })
 
         } else {
@@ -330,7 +333,6 @@ export class Vehicle {
             const duration = this.fps > 0 ? dur : 0
             const fps = dur === 0 ? 0 : this.fps > 0 ? 1000 / this.fps : 500
             this.frame = fps > 0 ? setInterval(() => { ups.forEach((tween: any) => tween && tween.update()) }, fps) : null
-            const clear = () => { clearInterval(this.frame); this.prev.free = true; }
 
             const head_pre = this.prev.map.rot.z
             const head_dir = head_pre < head // 1 -> 5 ? true || 5 -> 1 ? false
@@ -343,37 +345,38 @@ export class Vehicle {
                 const pos = { x: gps[0], y: gps[1], z: 0 }
                 const rot = { x: 0, y: 0, z: head_exc ? head_gen : head }
 
+                const clear = () => {
+
+                    clearInterval(this.frame)
+                    this.prev.map.pos = pos
+                    this.prev.map.rot = rot
+                    this.prev.free = true
+
+                }
+
                 if (fps > 0) {
 
-                    ups[0] = new TWEEN.Tween(this.prev.map.pos).to(pos, duration)
-                        .onComplete(() => clear())
-                        .onUpdate((_pos: any) => {
+                    ups[0] = new TWEEN.Tween(this.prev.map.pos).to(pos, duration).easing(Easing.Quadratic.InOut).onComplete(() => clear()).onUpdate((_pos: any) => {
 
-                            this.callback('position-map', { gps: _pos })
-                            this.TruckMap.getObject3d().position.copy(this.Maptalks.threeLayer.coordinateToVector3(_pos, 0))
-                            this.prev.free = true
+                        this.callback('position-map', { gps: _pos })
+                        this.TruckMap.getObject3d().position.copy(this.Maptalks.threeLayer.coordinateToVector3(_pos, 0))
 
-                        }).start()
+                    }).start()
 
-                    ups[1] = new TWEEN.Tween(this.prev.map.rot).to(rot, duration)
-                        .onComplete(() => clear())
-                        .onUpdate((_rot: any) => {
+                    ups[1] = new TWEEN.Tween(this.prev.map.rot).to(rot, duration).easing(Easing.Quadratic.InOut).onComplete(() => clear()).onUpdate((_rot: any) => {
 
-                            this.TruckMap.getObject3d().rotation.fromArray([_rot.x, _rot.y, _rot.z])
+                        this.TruckMap.getObject3d().rotation.fromArray([_rot.x, _rot.y, _rot.z])
 
-                        }).start()
+                    }).start()
 
                 } else {
 
                     this.callback('position-map', { gps: pos })
                     this.TruckMap.getObject3d().position.copy(this.Maptalks.threeLayer.coordinateToVector3(pos, 0))
                     this.TruckMap.getObject3d().rotation.fromArray([rot.x, rot.y, rot.z])
-                    this.prev.free = true
+                    clear()
 
                 }
-
-                this.prev.map.pos = pos
-                this.prev.map.rot = rot
 
             }
 
@@ -382,26 +385,38 @@ export class Vehicle {
                 const pos = { x: utm[0], y: utm[1], z: utm[2] }
                 const rot = { x: 0, y: 0, z: head_exc ? head_gen : head }
 
-                if (fps > 0) {
+                const clear = () => {
 
-                    ups[2] = new TWEEN.Tween(this.prev.three.pos).to(pos, duration)
-                        .onComplete(() => clear())
-                        .onUpdate((_pos: any) => this.TruckThree.position.fromArray([_pos.x, _pos.y, _pos.z])).start()
-
-                    ups[3] = new TWEEN.Tween(this.prev.three.rot).to(rot, duration)
-                        .onComplete(() => clear())
-                        .onUpdate((_rot: any) => this.TruckThree.rotation.fromArray([_rot.x, _rot.y, _rot.z])).start()
-
-                } else {
-
-                    this.TruckThree.position.fromArray([pos.x, pos.y, pos.z])
-                    this.TruckThree.rotation.fromArray([rot.x, rot.y, rot.z])
+                    clearInterval(this.frame)
+                    this.prev.three.pos = pos
+                    this.prev.three.rot = rot
                     this.prev.free = true
 
                 }
 
-                this.prev.three.pos = pos
-                this.prev.three.rot = rot
+                if (fps > 0) {
+
+                    ups[2] = new TWEEN.Tween(this.prev.three.pos).to(pos, duration).easing(Easing.Quadratic.InOut).onComplete(() => clear()).onUpdate((_pos: any) => {
+
+                        this.callback('position-three', { gps: _pos })
+                        this.TruckThree.position.fromArray([_pos.x, _pos.y, _pos.z])
+
+                    }).start()
+
+                    ups[3] = new TWEEN.Tween(this.prev.three.rot).to(rot, duration).easing(Easing.Quadratic.InOut).onComplete(() => clear()).onUpdate((_rot: any) => {
+
+                        this.TruckThree.rotation.fromArray([_rot.x, _rot.y, _rot.z])
+
+                    }).start()
+
+                } else {
+
+                    this.callback('position-three', { gps: pos })
+                    this.TruckThree.position.fromArray([pos.x, pos.y, pos.z])
+                    this.TruckThree.rotation.fromArray([rot.x, rot.y, rot.z])
+                    clear()
+
+                }
 
             }
 

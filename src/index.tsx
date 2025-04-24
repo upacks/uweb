@@ -2,7 +2,7 @@ import { React, Render, Typography, Row, Col } from './react'
 import { ThreeView } from './three'
 import { MapView } from './maptalks'
 import { LoadRequiredFiles, UTM, Vehicle, Toyota, Dozer, Drill, Exca, Dump, Truck } from './utils'
-import { log, Loop, Delay } from 'utils/web'
+import { log, Loop, Delay, AsyncWait } from 'utils/web'
 
 const { useEffect, useRef } = React
 
@@ -42,7 +42,7 @@ const main = ({ isDarkMode }: any) => {
             containerId: 'render_0',
             simulate: true,
             isDarkMode,
-            urlTemplate: types.satellite,
+            urlTemplate: types.topo,
             // lat: ll[0],
             // lon: ll[1],
             lat: 0,
@@ -50,6 +50,7 @@ const main = ({ isDarkMode }: any) => {
             zoom: 19,
             fps: 10,
             // devicePixelRatio: 0.5,
+            statusbar: true
         })
 
         v1.current = new ThreeView({
@@ -81,7 +82,7 @@ const main = ({ isDarkMode }: any) => {
 
                     Toyota({}).then((t: any) => {
 
-                        const v = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current, fps: 60})
+                        const v = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current, fps: 25 })
 
                         // Delay(() => v.update(gen(posx + (i * 30), 0, 0, 1)), 250 * i)
                         // Delay(() => v.update(gen(posx + (i * 40), 0, 0, 10 / i)), 500 * i + (i * 500))
@@ -94,12 +95,13 @@ const main = ({ isDarkMode }: any) => {
                             let cases = [0, 1, 2, 3, 1, 5, 1, 0]
                             let len = cases.length
 
-                            Loop(() => {
+                            Loop(async () => {
 
+                                await AsyncWait(Math.random() * 1000)
                                 v.update(gen(posx + (i * 30), 0, 0, cases[++pi % len]))
                                 // v.update(gen(posx + (i * 30), 0, 0, Math.PI * pi++))
 
-                            }, 500)
+                            }, 1500)
 
                             return null
                             v.on((state: any, args) => {
@@ -168,8 +170,8 @@ const main = ({ isDarkMode }: any) => {
     }, [isDarkMode])
 
     return <Row id="main" style={{ height: '100%' }}>
-        <Col id='render_0' span={24} style={{ height: '100%' }} />
-        {/* <Col id='render_1' span={24} style={{ height: '50%' }} /> */}
+        <Col id='render_0' span={12} style={{ height: '100%' }} />
+        <Col id='render_1' span={12} style={{ height: '100%' }} />
     </Row>
 
 }
