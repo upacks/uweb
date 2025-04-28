@@ -33,6 +33,7 @@ const main = ({ isDarkMode }: any) => {
         }
 
         const types = {
+            'free': 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
             'topo': 'https://api.maptiler.com/maps/topo-v2/{z}/{x}/{y}.png?key=l4hWJmvvmISSL7tpiPUZ',
             'satellite': 'https://api.maptiler.com/maps/satellite/256/{z}/{x}/{y}.jpg?key=l4hWJmvvmISSL7tpiPUZ',
             'openstreet': 'https://api.maptiler.com/maps/openstreetmap/{z}/{x}/{y}.jpg?key=l4hWJmvvmISSL7tpiPUZ',
@@ -42,7 +43,7 @@ const main = ({ isDarkMode }: any) => {
             containerId: 'render_0',
             simulate: true,
             isDarkMode,
-            urlTemplate: types.topo,
+            urlTemplate: types.free,
             // lat: ll[0],
             // lon: ll[1],
             lat: 0,

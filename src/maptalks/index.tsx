@@ -8,6 +8,8 @@ import { distanceLatLon } from '../utils'
 import bearing from '@turf/bearing'
 import { point, Coord } from '@turf/helpers'
 
+import { skyLayer } from './sky'
+
 const { RoomEnvironment } = require('three/addons/environments/RoomEnvironment.js')
 const TWEEN = require('@tweenjs/tween.js')
 
@@ -89,6 +91,8 @@ class MapView {
                 this.conf.readyCallback()
 
             }
+
+            this.map.addLayer(skyLayer)
 
             this.threeLayer.addTo(this.map)
 
