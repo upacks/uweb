@@ -128,7 +128,7 @@ const main = ({ isDarkMode }: any) => {
                         anim && setTimeout(() => v.animate("Take 001", { loop: true, speed: 0.5 }), 2500)
                     })
 
-                    Drill({}).then((t: any) => {
+                    Drill({}, { opacity: 0.1 }).then((t: any) => {
                         const v = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current })
                         Delay(() => v.update(gen(posx + (i * 30), 60, 0, 0)), 250 * i)
                         anim && setTimeout(() => v.animate("Take 001", { loop: true, speed: 0.5 }), 2500)

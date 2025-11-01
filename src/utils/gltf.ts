@@ -90,60 +90,86 @@ const GenerateCommon = (gltf: any, scale: number, div: number, point: any = [2, 
 
 }
 
-export const Exca = ({ size = 1, x = 0, y = 0, z = 0 }: { size?: number, x?: number, y?: number, z?: number }): Promise<iGLTF> =>
+const style = (gltf: any, cfg: any) => {
+
+    if (gltf) {
+
+        if (cfg.hasOwnProperty('opacity')) {
+
+            const model = gltf.scene.children[0]
+            model.children.map((e: any) => {
+                e.material.opacity = cfg.opacity
+                e.material.transparent = true
+            })
+
+        }
+
+        if (true) { }
+
+    }
+
+}
+
+export const Exca = ({ size = 1, x = 0, y = 0, z = 0 }: { size?: number, x?: number, y?: number, z?: number }, cfg: any = {}): Promise<iGLTF> =>
     new Promise((res) => LoadCache('./exca-mini.glb', (gltf: any) => {
 
         const scale = 1
+        style(gltf, cfg)
         gltf.scene.rotation.set(Math.PI / 2, -Math.PI / 2, 0)
         gltf.scene.position.set(x + 8, y - 24, z)
         res(GenerateCommon(gltf, (size < 0 || size > 10) ? scale : (scale * size), 45, [3.5, 0, -10]))
 
     }))
 
-export const Drill = ({ size = 1, x = 0, y = 0, z = 0 }: { size?: number, x?: number, y?: number, z?: number }): Promise<iGLTF> =>
+export const Drill = ({ size = 1, x = 0, y = 0, z = 0 }: { size?: number, x?: number, y?: number, z?: number }, cfg: any = {}): Promise<iGLTF> =>
     new Promise((res) => LoadCache('./drill-mini.glb', (gltf: any) => {
 
         const scale = 1.2
+        style(gltf, cfg)
         gltf.scene.rotation.set(Math.PI / 2, -Math.PI / 2, 0)
         gltf.scene.position.set(x - 0.55, y - 2.5, z)
         res(GenerateCommon(gltf, (size < 0 || size > 10) ? scale : (scale * size), 45, [1.5, -0.5, -3]))
 
     }))
 
-export const Dozer = ({ size = 1, x = 0, y = 0, z = 0 }: { size?: number, x?: number, y?: number, z?: number }): Promise<iGLTF> =>
+export const Dozer = ({ size = 1, x = 0, y = 0, z = 0 }: { size?: number, x?: number, y?: number, z?: number }, cfg: any = {}): Promise<iGLTF> =>
     new Promise((res) => LoadCache('./dozer-mini.glb', (gltf: any) => {
 
         const scale = 0.5
+        style(gltf, cfg)
         gltf.scene.rotation.set(Math.PI / 2, Math.PI / 2, 0)
         gltf.scene.position.set(x + 8.5, y + 40, z)
         res(GenerateCommon(gltf, (size < 0 || size > 10) ? scale : (scale * size), 45, [4, 0, -7.5]))
 
     }))
 
-export const Dump = ({ size = 1, x = 0, y = 0, z = 0 }: { size?: number, x?: number, y?: number, z?: number }): Promise<iGLTF> =>
+export const Dump = ({ size = 1, x = 0, y = 0, z = 0 }: { size?: number, x?: number, y?: number, z?: number }, cfg: any = {}): Promise<iGLTF> =>
     new Promise((res) => LoadCache('./dump-mini.glb', (gltf: any) => {
 
         const scale = 0.7
+        style(gltf, cfg)
         gltf.scene.rotation.set(Math.PI / 2, Math.PI * 2, 0)
         gltf.scene.position.set(x, y - 5.5, z)
         res(GenerateCommon(gltf, (size < 0 || size > 10) ? scale : (scale * size), 45, [3.8, 0, -6]))
 
     }))
 
-export const Truck = ({ size = 1, x = 0, y = 0, z = 0 }: { size?: number, x?: number, y?: number, z?: number }): Promise<iGLTF> =>
+export const Truck = ({ size = 1, x = 0, y = 0, z = 0 }: { size?: number, x?: number, y?: number, z?: number }, cfg: any = {}): Promise<iGLTF> =>
     new Promise((res) => LoadCache('./truck-mini.glb', (gltf: any) => {
 
         const scale = 0.4
+        style(gltf, cfg)
         gltf.scene.rotation.set(Math.PI / 2, Math.PI / 2, 0)
         gltf.scene.position.set(x - 24.5, y + 40, z)
         res(GenerateCommon(gltf, (size < 0 || size > 10) ? scale : (scale * size), 45, [5, 0, -11]))
 
     }))
 
-export const Toyota = ({ size = 1, x = 0, y = 0, z = 0 }: { size?: number, x?: number, y?: number, z?: number }): Promise<iGLTF> =>
+export const Toyota = ({ size = 1, x = 0, y = 0, z = 0 }: { size?: number, x?: number, y?: number, z?: number }, cfg: any = {}): Promise<iGLTF> =>
     new Promise((res) => LoadCache('./car-mini.glb', (gltf: any) => {
 
         const scale = 1.4
+        style(gltf, cfg)
         gltf.scene.rotation.set(Math.PI / 2, Math.PI, 0)
         gltf.scene.position.set(x, y - 3.25, z)
         res(GenerateCommon(gltf, (size < 0 || size > 10) ? scale : (scale * size), 45, [1.2, 0, -1.5]))
@@ -173,7 +199,8 @@ export class Vehicle {
         three: { pos: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } },
         moves: [],
         free: true,
-        update: 0
+        update: 0,
+        opacity: 1,
     }
 
     callback: any = (...n: any) => { }
