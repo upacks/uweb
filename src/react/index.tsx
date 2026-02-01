@@ -21,27 +21,31 @@ const Render = (Main: FC | any, Setting: FC | any, _: any) => {
             <Layout style={{ height: '100%', width: '100%' }}>
                 <div style={{ height: '100%', width: '100%', background: isDarkMode ? '#333' : '#fff' }}>
                     <Layout id="main" style={{ margin: 'auto', height: '100%', maxWidth: _.maxWidth ?? 1280, padding: 0 }}>
-                        <Main isDarkMode={isDarkMode} />
+                        <Main setIsDarkMode={setIsDarkMode} isDarkMode={isDarkMode} />
                     </Layout>
                 </div>
             </Layout>
 
-            <Modal
-                title="Settings"
-                centered
-                open={open}
-                onCancel={() => setOpen(false)}
-                footer={null}
-                width={768}
-                destroyOnClose={true}
-            >
-                <Setting isDarkMode={isDarkMode} />
-            </Modal>
+            {Setting ? (<>
 
-            <FloatButton.Group shape="circle" style={{ right: 24, zIndex: 99 }}>
-                <FloatButton onClick={() => setOpen(true)} icon={<SettingOutlined />} />
-                <FloatButton onClick={() => setIsDarkMode((previousValue) => !previousValue)} icon={isDarkMode ? <BulbOutlined /> : <BulbFilled />} />
-            </FloatButton.Group>
+                <Modal
+                    title="Settings"
+                    centered
+                    open={open}
+                    onCancel={() => setOpen(false)}
+                    footer={null}
+                    width={768}
+                    destroyOnClose={true}
+                >
+                    <Setting setIsDarkMode={setIsDarkMode} isDarkMode={isDarkMode} />
+                </Modal>
+
+                <FloatButton.Group shape="circle" style={{ right: 24, zIndex: 99 }}>
+                    <FloatButton onClick={() => setOpen(true)} icon={<SettingOutlined />} />
+                    <FloatButton onClick={() => setIsDarkMode((previousValue) => !previousValue)} icon={isDarkMode ? <BulbOutlined /> : <BulbFilled />} />
+                </FloatButton.Group>
+
+            </>) : null}
 
         </ConfigProvider>
 

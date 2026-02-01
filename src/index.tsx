@@ -8,16 +8,17 @@ const { useEffect, useRef } = React
 
 const { Title } = Typography
 
-const ll = [43.67338010130343, 105.49508346330428, 0]
-console.log(UTM.convertLatLngToUtm(0, 100.51125610283364, 2))
-
-const main = ({ isDarkMode }: any) => {
+const main = ({ isDarkMode, setIsDarkMode }: any) => {
 
     const v0 = useRef<any>({})
     const v1 = useRef<any>({})
     const t0 = useRef<any>({})
 
     useEffect(() => {
+
+        Loop(() => {
+            setIsDarkMode((v: any) => !v)
+        }, 5000)
 
         const ready: string[] = []
         const onReady = (indicate: string) => {
@@ -179,4 +180,4 @@ const main = ({ isDarkMode }: any) => {
 
 const setting = ({ isDarkMode }: any) => <Title>:OMG:{isDarkMode ? 'DARK' : 'LIGHT'}</Title>
 
-Render(main, setting, { maxWidth: '100%' })
+Render(main, null, { maxWidth: '100%' })
