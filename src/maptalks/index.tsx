@@ -47,6 +47,9 @@ class MapView {
             ...conf,
         }
 
+        if (!this.conf.hasOwnProperty('custom')) this.conf.custom = {}
+        if (!this.conf.hasOwnProperty('customBase')) this.conf.customBase = {}
+
         const optional: any = {
             devicePixelRatio: this.conf.devicePixelRatio ?? 1,
         }
@@ -62,11 +65,13 @@ class MapView {
                 doubleClickZoom: this.conf.doubleClickZoom ?? false,
                 centerCross: false,
                 ...optional,
+                ...this.conf.custom,
                 baseLayer: new TileLayer('base', {
                     urlTemplate: this.conf.urlTemplate,
                     subdomains: ["a", "b", "c", "d"],
                     attribution: '&copy; <a href="https://gearlink.cc/">GearLink</a>',
                     cssFilter: this.getFilter(this.conf.isDarkMode),
+                    ...this.conf.customBase,
                 }),
             })
 

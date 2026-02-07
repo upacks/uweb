@@ -52,7 +52,10 @@ const main = ({ isDarkMode, setIsDarkMode }: any) => {
             zoom: 19,
             fps: 10,
             // devicePixelRatio: 0.5,
-            statusbar: true
+            statusbar: true,
+            custom: {
+                centerCross: true,
+            }
         })
 
         v1.current = new ThreeView({

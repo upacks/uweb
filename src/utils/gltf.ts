@@ -193,6 +193,7 @@ export class Vehicle {
     fps = 30
     frame: any = null
     buffer: boolean = false /** Buffer the moves, for smooth transitioning **/
+    visible: boolean = true
 
     prev: any = {
         map: { pos: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } },
@@ -225,8 +226,9 @@ export class Vehicle {
             this.isM = true
 
             this.TruckMap = Maptalks.threeLayer.toModel(Truck.MapPivot, {
-                coordinate: Maptalks.map.getCenter(),
+                coordinate: [0, 0] // Maptalks.map.getCenter()
             })
+
             this.Maptalks.threeLayer.addMesh(this.TruckMap)
 
             this.TruckMap.on("click", () => this.callback('mouse', 'click'))
