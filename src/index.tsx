@@ -73,10 +73,19 @@ const main = ({ isDarkMode, setIsDarkMode }: any) => {
 
             setTimeout(() => {
 
+                const altitude = (el: number) => {
+                    if (el === 0) return 0
+                    const elevation = el || 0
+                    const vector3 = v0.current?.threeLayer.distanceToVector3(elevation, elevation)
+                    const zPos = vector3.x
+                    return zPos
+                }
+
                 const gen = (x = 0, y = 0, z = 0, h = 0): any => {
 
                     const { lat, lng } = UTM.convertUtmToLatLng(x, y, "48", "N")
-                    return { gps: [lng, lat, z], utm: [x, y, z], head: h }
+                    //
+                    return { gps: [lng, lat, altitude(z)], utm: [x, y, z], head: h }
 
                 }
 
@@ -128,7 +137,7 @@ const main = ({ isDarkMode, setIsDarkMode }: any) => {
 
                     Dozer({}).then((t: any) => {
                         const v = new Vehicle({ Truck: t, Maptalks: v0.current, Three: v1.current, fps: 10 })
-                        Delay(() => v.update(gen(posx + (i * 30), 30, 0, 0)), 250 * i)
+                        Delay(() => v.update(gen(posx + (i * 30), 30, 10, 0)), 250 * i)
                         anim && setTimeout(() => v.animate("Take 001", { loop: true, speed: 0.5 }), 2500)
                     })
 

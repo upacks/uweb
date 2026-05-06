@@ -371,7 +371,7 @@ export class Vehicle {
 
             if (this.isM) {
 
-                const pos = { x: gps[0], y: gps[1], z: 0 }
+                const pos = { x: gps[0], y: gps[1], z: gps[2] }
                 const rot = { x: 0, y: 0, z: head_exc ? head_gen : head }
 
                 const clear = () => {
@@ -388,7 +388,7 @@ export class Vehicle {
                     ups[0] = new TWEEN.Tween(this.prev.map.pos).to(pos, duration).easing(Easing.Quadratic.InOut).onComplete(() => clear()).onUpdate((_pos: any) => {
 
                         this.callback('position-map', { gps: _pos })
-                        this.TruckMap.getObject3d().position.copy(this.Maptalks.threeLayer.coordinateToVector3(_pos, 0))
+                        this.TruckMap.getObject3d().position.copy(this.Maptalks.threeLayer.coordinateToVector3(_pos, _pos.z))
 
                     }).start()
 
@@ -401,7 +401,7 @@ export class Vehicle {
                 } else {
 
                     this.callback('position-map', { gps: pos })
-                    this.TruckMap.getObject3d().position.copy(this.Maptalks.threeLayer.coordinateToVector3(pos, 0))
+                    this.TruckMap.getObject3d().position.copy(this.Maptalks.threeLayer.coordinateToVector3(pos, pos.z))
                     this.TruckMap.getObject3d().rotation.fromArray([rot.x, rot.y, rot.z])
                     clear()
 
