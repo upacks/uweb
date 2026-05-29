@@ -38,6 +38,8 @@ class MapView {
         urlTemplate: 'http://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
         readyCallback: (...e: any) => { },
         updateCallback: (...e: any) => { },
+        postUpdateCallback: (...e: any) => { },
+
     }
 
     constructor(conf: any) {
@@ -103,14 +105,17 @@ class MapView {
 
             const update = () => {
 
-                // setTimeout(() => requestAnimationFrame(update), 1000 / (this.conf.fps ?? 25))
                 requestAnimationFrame(update)
                 const delta = this.clock.getDelta()
+
+                this.conf.updateCallback && this.conf.updateCallback()
+
                 this.mixers.forEach((mixer: any) => mixer && mixer.update(delta))
                 TWEEN.update()
 
-                this.conf.updateCallback && this.conf.updateCallback()
                 this.threeLayer._needsUpdate && !this.threeLayer.isRendering() && this.threeLayer.redraw()
+
+                this.conf.postUpdateCallback && this.conf.postUpdateCallback(delta)
 
             }
 
