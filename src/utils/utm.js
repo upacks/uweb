@@ -84,7 +84,7 @@ method.convertLatLngToUtm = function (latitude, longitude, precision) {
 };
 
 
-method.convertUtmToLatLng = function (UTMEasting, UTMNorthing, UTMZoneNumber, UTMZoneLetter, round = true) {
+method.convertUtmToLatLng = function (UTMEasting, UTMNorthing, UTMZoneNumber, UTMZoneLetter) {
 	var e1 = (1 - Math.sqrt(1 - this.eccSquared)) / (1 + Math.sqrt(1 - this.eccSquared));
 	var x = UTMEasting - 500000.0; //remove 500,000 meter offset for longitude
 	var y = UTMNorthing;
@@ -136,10 +136,6 @@ method.convertUtmToLatLng = function (UTMEasting, UTMNorthing, UTMZoneNumber, UT
 	var Long = (D - (1 + 2 * T1 + C1) * D * D * D / 6 + (5 - 2 * C1 + 28 * T1 - 3 * C1 * C1 + 8 * eccPrimeSquared + 24 * T1 * T1)
 		* D * D * D * D * D / 120) / Math.cos(phi1Rad);
 	Long = LongOrigin + this.toDegrees(Long);
-
-	if (round) Lat = Math.round(Lat * 1000000000) / 1000000000
-	if (round) Long = Math.round(Long * 1000000000) / 1000000000
-
 	return { lat: Lat, lng: Long };
 };
 
@@ -300,12 +296,12 @@ method.setEllipsoid = function (name) {
 
 method.toDegrees = function (rad) {
 
-	return rad / 3.141592654 * 180;
+	return rad / Math.PI * 180;
 };
 
 method.toRadians = function (deg) {
 
-	return deg * 3.141592654 / 180;
+	return deg * Math.PI / 180;
 };
 
 function precisionRound(number, precision) {
