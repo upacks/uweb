@@ -137,8 +137,8 @@ method.convertUtmToLatLng = function (UTMEasting, UTMNorthing, UTMZoneNumber, UT
 		* D * D * D * D * D / 120) / Math.cos(phi1Rad);
 	Long = LongOrigin + this.toDegrees(Long);
 
-	if (precision) Lat = Math.round(Lat * 1000000000) / 1000000000
-	if (precision) Long = Math.round(Long * 1000000000) / 1000000000
+	if (round) Lat = Math.round(Lat * 1000000000) / 1000000000
+	if (round) Long = Math.round(Long * 1000000000) / 1000000000
 
 	return { lat: Lat, lng: Long };
 };
